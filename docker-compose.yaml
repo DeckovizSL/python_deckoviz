@@ -1,0 +1,21 @@
+services:
+
+  deckoviz_ai:
+    build: .
+    container_name: deckoviz_ai
+    image: deckoviz_ai
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082"]
+    ports:
+      - "8082:8082"
+    volumes:
+      - .:/app
+    networks:
+      - decoviz_common_default
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+
+networks:
+  decoviz_common_default: 
+    driver: bridge

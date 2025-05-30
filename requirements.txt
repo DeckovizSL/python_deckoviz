@@ -4,8 +4,6 @@ pillow>=10.0.0
 python-dotenv>=0.19.0
 requests>=2.28.0
 asyncio>=3.4.3
-nltk>=3.8.1
-transformers
 # Backend dependencies for FastAPI
 fastapi[standard]
 uvicorn>=0.15.0
@@ -18,3 +16,15 @@ websockets
 
 
 assemblyai
+
+numpy>=1.23.0
+google-generativeai>=0.3.1
+google-genai
+gTTS>=2.5.4
+
+# Langchain Eco System
+sentence-transformers
+langchain
+langchain_community
+langchain-google-genai
+langgraph
