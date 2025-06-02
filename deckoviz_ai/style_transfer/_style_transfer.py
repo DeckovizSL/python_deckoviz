@@ -85,6 +85,8 @@ class StyleTransferRequest(BaseModel):
     image_base64: Optional[str] = Field(None, description="Base64 encoded image")
     preset_style: Optional[StyleCategory] = Field(None, description="Predefined style category")
     custom_style_description: Optional[str] = Field(None, description="Custom style description")
+    height: int = Field(512, description="Height of the generated image")
+    width: int = Field(512, description="Width of the generated image")
     intensity: float = Field(0.7, description="Style transfer intensity (0.1-1.0)")
     preserve_content: bool = Field(True, description="Whether to preserve original content structure")
 

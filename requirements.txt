@@ -23,3 +23,6 @@ langchain
 langchain_community
 langchain-google-genai
 langgraph
+
+# Monster AI
+runware
