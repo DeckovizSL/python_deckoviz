@@ -11,18 +11,21 @@ pydantic>=2.5.1
 sqlalchemy>=1.4.48
 psycopg2-binary>=2.9.5
 websockets
-
+asyncpg
 
 assemblyai
 
 google-generativeai>=0.3.1
 google-genai
-
+twilio
 # Langchain Eco System
 langchain
 langchain_community
 langchain-google-genai
+SpeechRecognition
+pydub
 langgraph
+pydantic-settings
 
 # Monster AI
 runware

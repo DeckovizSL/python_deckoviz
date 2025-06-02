@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import style_transfer
+from routers import style_transfer, generate_art, onboard
 
 
 app = FastAPI(title="Deckoviz AI API", 
@@ -20,6 +20,8 @@ app.add_middleware(
 # app.include_router(audio.router, prefix="/audio", tags=['Audio Processing'])
 # app.include_router(image.router, prefix="/personal-painter", tags=['Personal Painter'])
 app.include_router(style_transfer.router, prefix="/style-transfer", tags=['Style Transfer'])
+app.include_router(generate_art.router, prefix="/generate-art", tags=['Generate Art'])
+app.include_router(onboard.router, prefix="/onboarding", tags=['Onboarding'])
 
 @app.get("/")
 def read_root():

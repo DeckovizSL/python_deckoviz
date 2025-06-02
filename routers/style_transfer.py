@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+print(os.getenv("RUNWARE_API_KEY"))
+
 router = APIRouter()
 
 
@@ -21,9 +23,8 @@ async def style_transfer(image: UploadFile = File(...), req: StyleTransferReques
         agent = ImageStyleTransferAgent()
         result = await agent.process_style_transfer(req)
         
-
         # Initialize Runware
-        runware = Runware(api_key=os.getenv("RUNWARE_API_KEY"))
+        runware = Runware(api_key='tCirHxT1YvbwVNwt3vYSEddugeXkTrdg')
         await runware.connect()
         
         request_image = IImageInference(
@@ -36,8 +37,7 @@ async def style_transfer(image: UploadFile = File(...), req: StyleTransferReques
                 width=req.width,
           )
         images = await runware.imageInference(requestImage=request_image)
-        await runware.disconnect()
-        images = images["images"][0]
+        # images = images["images"][0]
         return images
     except Exception as e:
         return {"error": str(e)}
