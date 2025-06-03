@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/")
-async def generate_art(req: GenerateArtRequest = Depends()):
+async def generate_art(req: GenerateArtRequest):
     try:
         # Initialize Runware
         runware = Runware(api_key=os.getenv("RUNWARE_API_KEY"))
@@ -25,8 +25,6 @@ async def generate_art(req: GenerateArtRequest = Depends()):
                 width=req.width,
           )
         images = await runware.imageInference(requestImage=request_image)
-        await runware.disconnect()
-        images = images["images"][0]
         return images
     except Exception as e:
         return {"error": str(e)}
