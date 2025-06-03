@@ -82,6 +82,10 @@ class Settings(BaseSettings):
     redis_password: str = os.getenv("REDIS_PASSWORD", None)
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
+    # SQLite settings
+    sqlite_url: str = os.getenv("SQLITE_URL", "sqlite:///data/chat_history.db")
+    async_sqlite_url: str = os.getenv("ASYNC_SQLITE_URL", "sqlite+aiosqlite:///data/chat_history.db")
+    
     # Celery settings
     celery_broker_url: str = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
     celery_result_backend: str = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
@@ -98,13 +102,22 @@ class Settings(BaseSettings):
     twilio_token: str = os.getenv("TWILIO_TOKEN", "")
     twilio_phone: str = os.getenv("TWILIO_PHONE", "")
 
+
     # MongoDB settings
     mongo_db_url: str = os.getenv("MONGO_DB_URL", "")
 
     class Config:
         env_file = ".env"
 
+
 @lru_cache()
 def get_settings():
     """Get cached settings"""
     return Settings()
+
+# Function to clear the settings cache when needed
+def clear_settings_cache():
+    """Invalidate the settings cache to pick up new environment variables"""
+    get_settings.cache_clear()
+ 
+

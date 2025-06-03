@@ -2,6 +2,7 @@
 # Pydantic models for API validation
 from typing import List, Optional, Dict, Any
 from datetime import datetime
+from pydantic import BaseModel
 
 class MessageCreate(BaseModel):
     """Schema for creating a new message"""
@@ -26,7 +27,7 @@ class MessageResponse(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ChatCreate(BaseModel):
@@ -61,7 +62,7 @@ class ChatResponse(BaseModel):
     messages: List[MessageResponse] = []
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ChatSessionCreate(BaseModel):
@@ -90,7 +91,7 @@ class ChatSessionResponse(BaseModel):
     chats_count: Optional[int] = None  # Count of chats in this session
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ChatSessionDetailedResponse(ChatSessionResponse):
@@ -98,4 +99,29 @@ class ChatSessionDetailedResponse(ChatSessionResponse):
     chats: List[ChatResponse] = []
     
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class RequestMessage(BaseModel):
+    """Schema for request message"""
+    message: str
+
+class AIConversationMessage(BaseModel):
+    """Schema for personal painter message"""
+    id: str
+    session_id: str
+    role: str
+    content: str 
+
+    class Config:
+        from_attributes = True
+
+class PersonalPainterChatResponse(BaseModel):
+    """Schema for personal painter chat response"""
+    id: str
+    session_id: str
+    created_at: datetime
+    updated_at: datetime
+    messages: List[AIConversationMessage] = []
+    
+    class Config:
+        from_attributes = True

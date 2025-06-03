@@ -7,12 +7,11 @@ class OnboardingSession(Base):
     __tablename__ = "onboarding_sessions"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, unique=True, index=True)
+    tenant = Column(String, unique=True, index=True)
     session_id = Column(String, unique=True, index=True)
     status = Column(String, default="active")  # active, completed, abandoned
     started_at = Column(DateTime(timezone=False), default=datetime.now(timezone.utc))
     completed_at = Column(DateTime(timezone=False), nullable=True)
-    voice_call_completed = Column(Boolean, default=False)
     
     # Relationship to chat messages
     messages = relationship("ChatMessage", back_populates="session")

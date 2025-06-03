@@ -29,3 +29,8 @@ pydantic-settings
 
 # Monster AI
 runware
+aiosqlite
+
+ 
+# JWT Authentication
+python-jose[cryptography]
