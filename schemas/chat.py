@@ -103,7 +103,7 @@ class ChatSessionDetailedResponse(ChatSessionResponse):
 
 class RequestMessage(BaseModel):
     """Schema for request message"""
-    message: str
+    message: Optional[str] = None
 
 class AIConversationMessage(BaseModel):
     """Schema for personal painter message"""

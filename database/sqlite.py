@@ -27,6 +27,16 @@ def create_sqlite_db():
     )
     ''')
     
+    # Create the chat_sessions table if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS chat_sessions (
+        id TEXT PRIMARY KEY,
+        tenant TEXT NOT NULL,
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
     conn.commit()
     conn.close()
     print("SQLite database created successfully.")

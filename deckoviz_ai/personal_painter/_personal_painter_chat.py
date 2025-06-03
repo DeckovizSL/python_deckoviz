@@ -7,8 +7,9 @@ from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.runnables import RunnableSequence
 from langsmith import Client
 from ..llm import GeminiLLM
-from database.sqlite import Database
 import uuid
+from ._db import PersonalPainterDatabase
+
 
 load_dotenv()
 
@@ -24,8 +25,8 @@ class PersonalPainterConversation:
                  api_key: Optional[str] = None, 
                  model_name: str = "gemini-2.0-flash",
                  langsmith_api_key: Optional[str] = None,
-                 prompt_repo: str = "dharmendra622/dz_personal_painter",
-                 database_url: Optional[str] = ''):
+                 prompt_repo: str = "dharmendra622/dz_personal_painter"
+               ):
         """
         Initialize the search mode system with LangChain and structured output
         
@@ -63,12 +64,8 @@ class PersonalPainterConversation:
         # Create the chain
         self.chain = RunnableSequence(self.prompt_template, self.llm, self.output_parser)
         
-        if database_url:
-            # Initialize asynchronous database
-            self.database = Database(database_url)
-            # Note: We need to connect before using the database
-            # This will be done in a lifecycle method
-
+        self.database = PersonalPainterDatabase()
+ 
     def _load_prompt_from_langsmith(self, prompt_repo: str) -> PromptTemplate:
         """
         Load prompt from LangSmith hub or use fallback
@@ -91,29 +88,6 @@ class PersonalPainterConversation:
         except Exception as e:
             raise RuntimeError(f"Failed to load prompt from LangSmith ({e}). Using fallback prompt.")
     
-    async def connect_db(self):
-        """Connect to the database if not already connected"""
-        if hasattr(self, 'database') and not self.database.is_connected:
-            await self.database.connect()
-            print("Database connected successfully.")
-    
-    async def disconnect_db(self):
-        """Disconnect from the database if connected"""
-        if hasattr(self, 'database') and self.database.is_connected:
-            await self.database.disconnect()
-            print("Database disconnected.")
-    
-    async def save_chat_message(self, tenant: str, message: str, role: str):
-        # Connect to the database if not already connected
-        await self.connect_db()
-        
-        query = "INSERT INTO chat_messages(id, tenant, message, role) VALUES (:id, :tenant, :message, :role)"
-        values = {"id": uuid.uuid4(), "tenant": tenant, "message": message, "role": role}
-        await self.database.execute(query=query, values=values)
-        print(f"Chat message from {tenant} saved asynchronously.")
-        
-        # Note: In a real application, you would typically disconnect in a lifecycle method
-        # but for now we'll keep the connection open for subsequent operations
 
     def next_chat(self, chat_history: List=[]) -> Question:
         """Generate a single question card based on user profile""" 

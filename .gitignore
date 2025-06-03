@@ -6,3 +6,9 @@ __pycache__
 uv.lock
 .venv
 .env
+
+
+# Ignore data directory and all its contents
+data/
+data/*
+*.db
