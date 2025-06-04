@@ -1,22 +1,12 @@
 from dotenv import load_dotenv
 import os
-from typing import Dict, List, Optional,Literal,Any
+from typing import Dict, List, Optional,Any
 from pydantic import BaseModel, Field
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.runnables import RunnableSequence
 from langsmith import Client
-from enum import Enum 
-from dataclasses import dataclass
-import time
-import multiprocessing as mp
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
-from functools import partial
-import threading
-from typing import List, Dict, Any
-from dataclasses import dataclass
-from datetime import datetime,timezone
-import os
+from ..llm import GeminiLLM
 
 load_dotenv()
 
@@ -151,9 +141,4 @@ class MetadataGenerator:
         return response
 
 
-if __name__ == '__main__':
-    
-    generator = MetadataGenerator()
-    
-    response = onboarding.generate('morning.jpeg')
-    print(response)
+ 
