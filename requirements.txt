@@ -32,7 +32,7 @@ runware
 aiosqlite
 
 # database
-database
+databases
  
 # JWT Authentication
 python-jose[cryptography]
