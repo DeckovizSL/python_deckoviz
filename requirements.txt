@@ -31,6 +31,8 @@ pydantic-settings
 runware
 aiosqlite
 
+# database
+database
  
 # JWT Authentication
 python-jose[cryptography]
