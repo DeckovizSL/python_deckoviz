@@ -3,6 +3,8 @@ from schemas.art import GenerateArtRequest
 from runware import Runware,IImageInference
 import os
 from dotenv import load_dotenv
+from schemas.user import User
+from utils.token import get_current_user
 
 load_dotenv()
 
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.post("/")
-async def generate_art(req: GenerateArtRequest):
+async def generate_art(req: GenerateArtRequest,current_user: User = Depends(get_current_user)):
     try:
         # Initialize Runware
         runware = Runware(api_key=os.getenv("RUNWARE_API_KEY"))

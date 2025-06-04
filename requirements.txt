@@ -36,3 +36,4 @@ database
  
 # JWT Authentication
 python-jose[cryptography]
+boto3
