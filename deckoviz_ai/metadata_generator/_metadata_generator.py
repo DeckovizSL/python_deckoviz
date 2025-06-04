@@ -6,6 +6,12 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.runnables import RunnableSequence
 from langsmith import Client
+from datetime import datetime
+from PIL import Image
+import io
+import base64
+import boto3
+import re
 from ..llm import GeminiLLM
 
 load_dotenv()
@@ -29,7 +35,6 @@ class TechnicalDetails(BaseModel):
 
 
 class ImageMetadata(BaseModel):
-    id: str = Field(..., description="Unique identifier for the image.")
     title: str = Field(..., description="Title of the image.")
     upload_date: datetime = Field(..., description="Date and time when the image was uploaded.")
     descriptions: Descriptions = Field(..., description="Descriptions of the image in literal and emotive terms.")
@@ -39,7 +44,7 @@ class ImageMetadata(BaseModel):
 
 
 class MetadataGenerator:
-    
+
     def __init__(self, 
                  api_key: Optional[str] = None, 
                  model_name: str = "gemini-2.0-flash",
@@ -115,30 +120,48 @@ class MetadataGenerator:
         Returns:
             Dict: Formatted image data for Gemini
         """
-        # Read image as binary
-        with open(image_path, "rb") as image_file:
-            image_data = image_file.read()
+        if not image_path:
+            raise ValueError("Image path is required")
+        if image_path.startswith('https://'):
+            match = re.match(r'https://([^.]+)\.s3\.([^/]+)\.amazonaws\.com/(.+)', image_path)
+            if not match:
+                raise ValueError(f"Invalid S3 URL format: {image_path}")
+            # Extract bucket and key from s3 URL
+            bucket, region, key = match.groups()
+            s3_client = boto3.client('s3', region_name=region)
+            response = s3_client.get_object(Bucket=bucket, Key=key)
+            image_data = response['Body'].read()
+        else:
+            # Read image as binary
+            with open(image_path, "rb") as image_file: 
+                image_data = image_file.read()
         
         # Get image format
         image = Image.open(io.BytesIO(image_data))
-        image_format = image.format.lower()
+        image_format = image.format.lower() 
+        # Convert image to base64
+        image_base64 = base64.b64encode(image_data).decode('utf-8')
         
+        # Return the image in the format expected by Gemini
         return {
             "type": "image_url",
             "image_url": {
-                "url": f"data:image/{image_format};base64,{base64.b64encode(image_data).decode()}"
+                "url": f"data:image/{image_format};base64,{image_base64}"
             }
         }
-        
+    
     def generate(self, image_path:str) -> ImageMetadata:
-        """Generate a single question card based on user profile""" 
-        if not image_path: 
-            raise RuntimeError("Image path is empty.Pass {image_path} is required to analyse it.")
-        response = self.chain.invoke({
-            'image':self._prepare_image_for_gemini(image_path), 
-            'format_instructions': self.output_parser.get_format_instructions()
-        })
-        return response
+        """Generate metadata based on image""" 
+        try:
+            if not image_path: 
+                raise RuntimeError("Image path is empty.Pass {image_path} is required to analyse it.")
+            response = self.chain.invoke({
+                'image': self._prepare_image_for_gemini(image_path), 
+                'format_instructions': self.output_parser.get_format_instructions()
+            })
+            return response
+        except Exception as e:
+            raise RuntimeError(f"Failed to generate metadata: {e}")
 
 
  
