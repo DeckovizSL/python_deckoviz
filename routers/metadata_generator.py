@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends,UploadFile,File
+from fastapi import APIRouter,Depends, HTTPException,UploadFile,File
 from schemas.user import User
 from utils.token import get_current_user
 import os 
@@ -24,7 +24,7 @@ async def generate_metadata(image: UploadFile=File(...),current_user: User = Dep
         os.unlink(temp_file_path)
         return {"metadata":response}
     except Exception as e:
-        return {"error": str(e)}
+        return HTTPException(status_code=400,detail=str(e))
 
 @router.post("/generate-from-url")
 async def generate_metadata(req: MetadataGenerateRequest,current_user: User = Depends(get_current_user)):
@@ -32,4 +32,4 @@ async def generate_metadata(req: MetadataGenerateRequest,current_user: User = De
         response = metadata_generator.generate(req.image)
         return {"metadata":response}
     except Exception as e:
-        return {"error": str(e)}
+        return HTTPException(status_code=400,detail=str(e))

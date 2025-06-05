@@ -37,3 +37,8 @@ databases
 # JWT Authentication
 python-jose[cryptography]
 boto3
+
+numpy
+pandas
+scikit-learn
+sentence-transformers
