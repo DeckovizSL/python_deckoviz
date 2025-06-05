@@ -106,6 +106,8 @@ class Settings(BaseSettings):
     # MongoDB settings
     mongo_db_url: str = os.getenv("MONGO_DB_URL", "")
 
+    # AWS settings
+    aws_base_url: str = os.getenv("AWS_BASE_URL", "")
     class Config:
         env_file = ".env"
 
