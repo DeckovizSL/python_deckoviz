@@ -16,6 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
  
+ 
 # Include routers
 # app.include_router(audio.router, prefix="/audio", tags=['Audio Processing'])
 # app.include_router(image.router, prefix="/personal-painter", tags=['Personal Painter'])
