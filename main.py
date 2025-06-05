@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator
+from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator,embedding
 
 
 app = FastAPI(title="Deckoviz AI API", 
@@ -24,6 +24,7 @@ app.include_router(generate_art.router, prefix="/generate-art", tags=['Generate 
 app.include_router(onboard.router, prefix="/onboarding", tags=['Onboarding'])
 app.include_router(painter_chat.router, prefix="/painter-chat", tags=['Painter Chat'])
 app.include_router(metadata_generator.router, prefix="/metadata", tags=['Metadata Generator'])
+app.include_router(embedding.router, prefix="/embeddings", tags=['Embedding'])
 
 @app.get("/")
 def read_root():
