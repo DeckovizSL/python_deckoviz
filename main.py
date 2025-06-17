@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator,embedding
+from database.sqlite import create_sqlite_db
 
+# Initialize database
+create_sqlite_db()
 
 app = FastAPI(title="Deckoviz AI API", 
               description="AI services for Deckoviz platform", 

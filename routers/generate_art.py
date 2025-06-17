@@ -17,12 +17,17 @@ async def generate_art(req: GenerateArtRequest,current_user: User = Depends(get_
         # Initialize Runware
         runware = Runware(api_key=os.getenv("RUNWARE_API_KEY"))
         await runware.connect()
+        neg_prompt = ""
+        if req.negative_prompt:
+            neg_prompt = req.negative_prompt
+        else:
+            neg_prompt = "blurry, low resolution, pixelated, distorted faces, missing limbs, bad anatomy, extra fingers, low detail, poorly lit, overexposed, underexposed, noisy, artifacts, watermark, cropped, low contrast, flat colors, dull, amateu"
         
         request_image = IImageInference(
                 positivePrompt=req.prompt,
                 model="civitai:101055@128078",
                 numberResults=1,
-                negativePrompt=req.negative_prompt,
+                negativePrompt=neg_prompt,
                 height=req.height,
                 width=req.width,
           )

@@ -47,3 +47,5 @@ sentence-transformers
 # Milvus
 pymilvus[model]
 pymilvus
+
+celery
