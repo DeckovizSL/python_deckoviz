@@ -1,6 +1,6 @@
 # Utility dependencies
 pillow>=10.0.0
-python-dotenv>=0.19.0
+python-dotenv==1.0.1
 requests>=2.28.0
 asyncio>=3.4.3
 # Backend dependencies for FastAPI
@@ -19,7 +19,7 @@ google-generativeai>=0.3.1
 google-genai
 twilio
 # Langchain Eco System
-langchain
+langchain==0.1.20
 langchain_community
 langchain-google-genai
 SpeechRecognition
@@ -28,7 +28,7 @@ langgraph
 pydantic-settings
 
 # Monster AI
-runware
+runware>=0.4.12
 aiosqlite
 
 # database
@@ -41,8 +41,9 @@ boto3
 numpy
 pandas
 scikit-learn
-sentence-transformers
-
+nltk
+pydantic
+pydantic-settings
 
 # Milvus
 pymilvus[model]

@@ -1,6 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator,embedding, moodboard, poster
+from routers import (
+    style_transfer,
+    generate_art,
+    onboard,
+    painter_chat,
+    metadata_generator,
+    embedding,
+    moodboard,
+    poster,
+    image,
+    dream_visualizer,
+)
 from database.sqlite import create_sqlite_db
 
 # Initialize database
@@ -23,14 +34,19 @@ app.add_middleware(
 # Include routers
 # app.include_router(audio.router, prefix="/audio", tags=['Audio Processing'])
 # app.include_router(image.router, prefix="/personal-painter", tags=['Personal Painter'])
-app.include_router(style_transfer.router, prefix="/style-transfer", tags=['Style Transfer'])
-app.include_router(generate_art.router, prefix="/generate-art", tags=['Generate Art'])
-app.include_router(onboard.router, prefix="/onboarding", tags=['Onboarding'])
-app.include_router(painter_chat.router, prefix="/painter-chat", tags=['Painter Chat'])
-app.include_router(metadata_generator.router, prefix="/metadata", tags=['Metadata Generator'])
-app.include_router(embedding.router, prefix="/embeddings", tags=['Embedding'])
-app.include_router(moodboard.router, prefix="/moodboard", tags=['Moodboard'])
-app.include_router(poster.router, prefix="/poster", tags=['Poster'])
+app.include_router(onboard.router, prefix="/onboard", tags=["onboard"])
+app.include_router(style_transfer.router, prefix="/style_transfer", tags=["style_transfer"])
+app.include_router(
+    metadata_generator.router, prefix="/metadata_generator", tags=["metadata_generator"]
+)
+app.include_router(painter_chat.router, prefix="/painter_chat", tags=["painter_chat"])
+app.include_router(embedding.router, prefix="/embedding", tags=["embedding"])
+app.include_router(moodboard.router, prefix="/moodboard", tags=["moodboard"])
+app.include_router(poster.router, prefix="/poster", tags=["poster"])
+app.include_router(generate_art.router, prefix="/generate_art", tags=["generate_art"])
+app.include_router(image.router, prefix="/image", tags=["image"])
+app.include_router(dream_visualizer.router, prefix="/dream-visualizer", tags=["dream-visualizer"])
+# app.include_router(audio.router, prefix="/audio", tags=["audio"])
 
 @app.get("/")
 def read_root():
