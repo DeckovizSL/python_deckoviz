@@ -103,6 +103,7 @@ class MetadataGenerator:
                 # Try to pull from LangSmith hub 
                 prompt_template = self.langsmith_client.pull_prompt(prompt_repo)
                 print(f"Successfully loaded prompt from LangSmith: {prompt_repo}")
+                print(f"Prompt template: {prompt_template}")
                 return prompt_template
             else:
                 raise Exception("LangSmith client not initialized")
@@ -122,25 +123,35 @@ class MetadataGenerator:
         """
         if not image_path:
             raise ValueError("Image path is required")
+        
+        print(f"\nPreparing image: {image_path}")
+        
         if image_path.startswith('https://'):
             match = re.match(r'https://([^.]+)\.s3\.([^/]+)\.amazonaws\.com/(.+)', image_path)
             if not match:
                 raise ValueError(f"Invalid S3 URL format: {image_path}")
             # Extract bucket and key from s3 URL
             bucket, region, key = match.groups()
+            print(f"S3 details - Bucket: {bucket}, Region: {region}, Key: {key}")
             s3_client = boto3.client('s3', region_name=region)
             response = s3_client.get_object(Bucket=bucket, Key=key)
             image_data = response['Body'].read()
+            print(f"Read {len(image_data)} bytes from S3")
         else:
             # Read image as binary
+            print(f"Reading local file: {image_path}")
             with open(image_path, "rb") as image_file: 
                 image_data = image_file.read()
+            print(f"Read {len(image_data)} bytes from local file")
         
         # Get image format
         image = Image.open(io.BytesIO(image_data))
-        image_format = image.format.lower() 
+        image_format = image.format.lower()
+        print(f"Image format: {image_format}, Size: {image.size}")
+        
         # Convert image to base64
         image_base64 = base64.b64encode(image_data).decode('utf-8')
+        print(f"Base64 length: {len(image_base64)}")
         
         # Return the image in the format expected by Gemini
         return {
@@ -155,12 +166,22 @@ class MetadataGenerator:
         try:
             if not image_path: 
                 raise RuntimeError("Image path is empty.Pass {image_path} is required to analyse it.")
+            
+            print(f"\nGenerating metadata for: {image_path}")
+            image_data = self._prepare_image_for_gemini(image_path)
+            print("Image prepared successfully")
+            
+            print("Invoking LLM chain...")
             response = self.chain.invoke({
-                'image': self._prepare_image_for_gemini(image_path), 
+                'image': image_data, 
                 'format_instructions': self.output_parser.get_format_instructions()
             })
+            print("LLM chain completed successfully")
+            print(f"Metadata response: {response}")
+            
             return response
         except Exception as e:
+            print(f"Error in generate(): {str(e)}")
             raise RuntimeError(f"Failed to generate metadata: {e}")
 
 

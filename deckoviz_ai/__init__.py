@@ -1,0 +1,1 @@
+from .moodboard import MoodboardPrompt

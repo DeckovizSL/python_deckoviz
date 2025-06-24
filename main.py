@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator,embedding
+from routers import style_transfer, generate_art, onboard, painter_chat,metadata_generator,embedding, moodboard, poster
 from database.sqlite import create_sqlite_db
 
 # Initialize database
@@ -29,6 +29,8 @@ app.include_router(onboard.router, prefix="/onboarding", tags=['Onboarding'])
 app.include_router(painter_chat.router, prefix="/painter-chat", tags=['Painter Chat'])
 app.include_router(metadata_generator.router, prefix="/metadata", tags=['Metadata Generator'])
 app.include_router(embedding.router, prefix="/embeddings", tags=['Embedding'])
+app.include_router(moodboard.router, prefix="/moodboard", tags=['Moodboard'])
+app.include_router(poster.router, prefix="/poster", tags=['Poster'])
 
 @app.get("/")
 def read_root():
