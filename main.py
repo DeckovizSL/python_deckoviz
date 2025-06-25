@@ -11,6 +11,7 @@ from routers import (
     poster,
     image,
     dream_visualizer,
+    brand_asset,
 )
 from database.sqlite import create_sqlite_db
 
@@ -46,6 +47,7 @@ app.include_router(poster.router, prefix="/poster", tags=["poster"])
 app.include_router(generate_art.router, prefix="/generate_art", tags=["generate_art"])
 app.include_router(image.router, prefix="/image", tags=["image"])
 app.include_router(dream_visualizer.router, prefix="/dream-visualizer", tags=["dream-visualizer"])
+app.include_router(brand_asset.router, prefix="/brand-asset", tags=["brand-asset"])
 # app.include_router(audio.router, prefix="/audio", tags=["audio"])
 
 @app.get("/")
