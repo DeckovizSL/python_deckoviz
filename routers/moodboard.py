@@ -27,4 +27,4 @@ async def generate_moodboard(
         # Call the generate_art endpoint logic directly
         return await generate_art(art_req, current_user)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))

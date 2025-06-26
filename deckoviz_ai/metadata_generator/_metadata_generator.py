@@ -4,7 +4,7 @@ from typing import Dict, List, Optional,Any
 from pydantic import BaseModel, Field
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
-from langchain_core.runnables import RunnableSequence
+from langchain_core.runnables import RunnableSequence, RunnableParallel, RunnableLambda
 from langsmith import Client
 from datetime import datetime
 from PIL import Image
@@ -85,8 +85,26 @@ class MetadataGenerator:
         self.prompt_template = self._load_prompt_from_langsmith(prompt_repo)
         
         # Create the chain
-        self.chain = RunnableSequence(self.prompt_template, self.llm, self.output_parser)
+        # The chain now constructs a dictionary to pass to the custom LLM
+        self.chain = RunnableParallel(
+            prompt_text=self.prompt_template,
+            image=RunnableLambda(lambda x: x['image'])
+        ) | self.llm | self.output_parser
     
+
+    def _create_fallback_prompt(self) -> PromptTemplate:
+        """Create a fallback prompt template."""
+        return PromptTemplate.from_template(
+            """
+            Analyze the provided image and generate detailed, accurate metadata. 
+            The output should be a JSON object with the following fields: 
+            - "title": A concise, descriptive title for the image.
+            - "description": A detailed one-paragraph description of the image content, including objects, setting, mood, and style.
+            - "tags": A list of relevant keywords and tags.
+
+            {format_instructions}
+            """
+        )
 
     def _load_prompt_from_langsmith(self, prompt_repo: str) -> PromptTemplate:
         """
@@ -98,6 +116,10 @@ class MetadataGenerator:
         Returns:
             PromptTemplate: Loaded or fallback prompt template
         """
+        # Temporarily force fallback prompt for debugging
+        print("DEBUG: Forcing fallback prompt.")
+        return self._create_fallback_prompt()
+        
         try:
             if self.langsmith_client:
                 # Try to pull from LangSmith hub 
@@ -109,7 +131,8 @@ class MetadataGenerator:
                 raise Exception("LangSmith client not initialized")
                 
         except Exception as e:
-            raise RuntimeError(f"Failed to load prompt from LangSmith ({e}). Using fallback prompt.")
+            print(f"Failed to load prompt from LangSmith ({e}). Using fallback prompt.")
+            return self._create_fallback_prompt()
             
     def _prepare_image_for_gemini(self, image_path: str) -> Dict[str, Any]:
         """

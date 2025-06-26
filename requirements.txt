@@ -50,3 +50,6 @@ pymilvus[model]
 pymilvus
 
 celery
+
+pdfplumber
+sentence-transformers
