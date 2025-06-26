@@ -30,6 +30,21 @@ async def create_dream_chat_session(current_user: User = Depends(get_current_use
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create dream session: {str(e)}")
 
+@router.get("/{session_id}", tags=["Dream Visualizer Chat"], summary="Get chat history for a session")
+async def get_dream_chat_history(session_id: str, current_user: User = Depends(get_current_user)):
+    # Verify session exists and is active
+    query = "SELECT * FROM dream_chat_sessions WHERE id = :session_id AND tenant = :tenant AND is_active = True"
+    session_result = await dv_db.fetch_one(query=query, values={"session_id": session_id, "tenant": current_user.id})
+    if not session_result:
+        raise HTTPException(status_code=404, detail="Dream session not found or inactive")
+
+    # Load messages for this specific session
+    query = "SELECT * FROM dream_chat_messages WHERE tenant = :tenant AND session_id = :session_id ORDER BY created_at ASC"
+    messages = await dv_db.fetch_all(query=query, values={"tenant": current_user.id, "session_id": session_id})
+    chat_history = [{"content": msg["message"], "role": msg["role"]} for msg in messages]
+
+    return {"session_id": session_id, "chat_history": chat_history}
+
 @router.post("/{session_id}", tags=["Dream Visualizer Chat"], summary="Post a message to a dream chat session")
 async def dream_chat(session_id: str, req: RequestMessage, current_user: User = Depends(get_current_user)): 
     query = "SELECT * FROM dream_chat_sessions WHERE id = :session_id AND tenant = :tenant AND is_active = True"
