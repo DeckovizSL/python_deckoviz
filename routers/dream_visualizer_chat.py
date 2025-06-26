@@ -30,6 +30,15 @@ async def create_dream_chat_session(current_user: User = Depends(get_current_use
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create dream session: {str(e)}")
 
+@router.get("/sessions", tags=["Dream Visualizer Chat"], summary="Get all chat sessions for the current user")
+async def get_all_user_dream_chats(current_user: User = Depends(get_current_user)):
+    """
+    Fetches all dream chat sessions initiated by the current user.
+    """
+    query = "SELECT id, created_at, is_active FROM dream_chat_sessions WHERE tenant = :tenant ORDER BY created_at DESC"
+    sessions = await dv_db.fetch_all(query=query, values={"tenant": current_user.id})
+    return sessions if sessions else []
+
 @router.get("/{session_id}", tags=["Dream Visualizer Chat"], summary="Get chat history for a session")
 async def get_dream_chat_history(session_id: str, current_user: User = Depends(get_current_user)):
     # Verify session exists and is active
