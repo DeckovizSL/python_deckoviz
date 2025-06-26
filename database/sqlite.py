@@ -26,6 +26,13 @@ def create_sqlite_db():
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='chat_sessions'")
             chat_sessions_exists = cursor.fetchone() is not None
             
+            # Check if dream tables exist
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='dream_chat_messages'")
+            dream_chat_messages_exists = cursor.fetchone() is not None
+
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='dream_chat_sessions'")
+            dream_chat_sessions_exists = cursor.fetchone() is not None
+
             # Create or migrate chat_messages table
             if not chat_messages_exists:
                 cursor.execute('''
@@ -124,7 +131,33 @@ def create_sqlite_db():
                             cursor.execute('ALTER TABLE chat_sessions_new RENAME TO chat_sessions')
                         else:
                             raise
-            
+
+            # Create dream_chat_sessions table
+            if not dream_chat_sessions_exists:
+                cursor.execute('''
+                CREATE TABLE dream_chat_sessions (
+                    id TEXT PRIMARY KEY,
+                    tenant TEXT NOT NULL,
+                    is_active BOOLEAN DEFAULT TRUE,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+                ''')
+
+            # Create dream_chat_messages table
+            if not dream_chat_messages_exists:
+                cursor.execute('''
+                CREATE TABLE dream_chat_messages (
+                    id TEXT PRIMARY KEY,
+                    tenant TEXT NOT NULL,
+                    message TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    session_id TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (session_id) REFERENCES dream_chat_sessions(id)
+                )
+                ''')
+
             conn.commit()
             conn.close()
             print("SQLite database created/migrated successfully.")

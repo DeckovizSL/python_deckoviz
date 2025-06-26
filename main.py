@@ -13,6 +13,7 @@ from routers import (
     brand_asset,
     image_meta_gen,
     book_to_frames_router,
+    dream_visualizer_chat,
 )
 from database.sqlite import create_sqlite_db
 
@@ -48,6 +49,7 @@ app.include_router(dream_visualizer.router, prefix="/dream-visualizer", tags=["d
 app.include_router(brand_asset.router, prefix="/brand-asset", tags=["brand-asset"])
 app.include_router(image_meta_gen.router, prefix="/image-meta-gen", tags=["Image Metadata Generation"])
 app.include_router(book_to_frames_router, prefix="/book_to_frames", tags=["book_to_frames"])
+app.include_router(dream_visualizer_chat.router, prefix="/dream-visualizer-chat", tags=["Dream Visualizer Chat"])
 # app.include_router(audio.router, prefix="/audio", tags=["audio"])
 
 @app.get("/")
