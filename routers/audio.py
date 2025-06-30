@@ -1,11 +1,13 @@
 from genai.assembly_ai import AudioProcessor
 from genai.audio_analysis import TranscriptAnalyzer
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, File, UploadFile
 from schemas.audio import (
     TranscriptionRequest, TranscriptionResponse,
     AnalysisRequest, AnalysisResponse
 )
 import logging
+import shutil
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +15,10 @@ router = APIRouter()
 
 # Initialize transcript analyzer
 transcript_analyzer = TranscriptAnalyzer()
+
+# Define the directory to store audio files
+AUDIO_DIR = "data/audio"
+os.makedirs(AUDIO_DIR, exist_ok=True)
 
 @router.post("/transcribe", response_model=TranscriptionResponse)
 async def transcribe_audio(request: TranscriptionRequest, background_tasks: BackgroundTasks):
@@ -43,6 +49,39 @@ async def transcribe_audio(request: TranscriptionRequest, background_tasks: Back
     except Exception as e:
         logger.error(f"Error transcribing audio: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/transcribe-file", response_model=TranscriptionResponse)
+async def transcribe_audio_file(file: UploadFile = File(...)):
+    """Transcribe audio from an uploaded file."""
+    try:
+        file_path = os.path.join(AUDIO_DIR, file.filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        logger.info(f"Transcribing audio from file: {file_path}")
+        processor = AudioProcessor()
+        transcript = processor.get_transcript(file_path)
+
+        response = {
+            "transcript": transcript,
+            "status": "completed",
+            "id": file.filename,  # Using filename as id
+            "audio_file_path": file_path,
+            "insights": None
+        }
+
+        # Optionally, you could add analysis here as well if needed
+        # For now, keeping it simple as per the request
+
+        return response
+    except Exception as e:
+        logger.error(f"Error transcribing audio file: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        # Clean up the file to prevent cluttering the server
+        # You might want to move this to a background task
+        # os.remove(file_path)
+        pass
 
 @router.post("/analyze", response_model=AnalysisResponse)
 async def analyze_transcript(request: AnalysisRequest):

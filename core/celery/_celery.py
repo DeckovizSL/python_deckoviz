@@ -16,7 +16,8 @@ celery_app = Celery(
     timezone="UTC",
     enable_utc=True,
 )
-
+from . import _tasks
+    
 # Configure Celery
 celery_app.conf.update(
     # Use a default queue with our namespace
@@ -28,14 +29,14 @@ celery_app.conf.update(
     
     # Beat schedule configuration
     beat_schedule={
-        'run-create-embeddings-every-minute': {
+        'run-create-embeddings-every-30-seconds': {
             'task': 'core.celery._tasks.create_embedding',
-            'schedule': 60,  # Execute every 60 seconds
+            'schedule': 30,  # Execute every 30 seconds
         },
-        'run-create-metadata-every-minute': {
-            'task': 'core.celery._tasks.create_metadata',
-            'schedule': 60,  # Execute every 60 seconds
-        }
+        # 'run-create-metadata-every-minute': {
+        #     'task': 'core.celery._tasks.create_metadata',
+        #     'schedule': 60,  # Execute every 60 seconds
+        # }
     },
     timezone='UTC',
 )

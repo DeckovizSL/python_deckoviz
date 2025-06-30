@@ -53,3 +53,5 @@ celery
 
 pdfplumber
 sentence-transformers
+transformers
+torch
