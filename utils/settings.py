@@ -108,6 +108,10 @@ class Settings(BaseSettings):
 
     # AWS settings
     aws_base_url: str = os.getenv("AWS_BASE_URL", "")
+
+    # Replicate API key
+    replicate_api_token: str = os.getenv("REPLICATE_API_TOKEN", "")
+
     class Config:
         env_file = ".env"
 
