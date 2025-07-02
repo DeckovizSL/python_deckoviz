@@ -18,6 +18,7 @@ from routers import (
     audio,
     vizzy,
     replicate_style_transfer,
+    replicate_iconic_art,
 )
 from database.sqlite import create_sqlite_db
 
@@ -57,6 +58,7 @@ app.include_router(book_to_frames_router, prefix="/book_to_frames", tags=["book_
 app.include_router(dream_visualizer_chat.router, prefix="/dream-visualizer-chat", tags=["Dream Visualizer Chat"])
 app.include_router(vizzy.router, prefix="/vizzy", tags=["Vizzy Voice Assistant"])
 app.include_router(replicate_style_transfer.router, prefix="/replicate_style_transfer", tags=["replicate_style_transfer"])
+app.include_router(replicate_iconic_art.router, prefix="/replicate_iconic_art", tags=["replicate_iconic_art"])
 
 @app.get("/")
 def read_root():

@@ -1,3 +1,3 @@
-from ._prompt import BrandAssetPrompt, BrandAssetRequest
+from ._prompt import BrandAssetPrompt, BrandAssetRequest, analyze_logo_image
 
-__all__ = ["BrandAssetPrompt", "BrandAssetRequest"] 
+__all__ = ["BrandAssetPrompt", "BrandAssetRequest", "analyze_logo_image"] 
