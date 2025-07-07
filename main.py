@@ -20,6 +20,7 @@ from routers import (
     replicate_style_transfer,
     replicate_iconic_art,
     image_to_video,
+    visual_journal,
 )
 from database.sqlite import create_sqlite_db
 
@@ -61,6 +62,7 @@ app.include_router(vizzy.router, prefix="/vizzy", tags=["Vizzy Voice Assistant"]
 app.include_router(replicate_style_transfer.router, prefix="/replicate_style_transfer", tags=["replicate_style_transfer"])
 app.include_router(replicate_iconic_art.router, prefix="/replicate_iconic_art", tags=["replicate_iconic_art"])
 app.include_router(image_to_video.router, prefix="/image-to-video", tags=["image-to-video"])
+app.include_router(visual_journal.router, prefix="/visual-journal", tags=["visual-journal"])
 
 @app.get("/")
 def read_root():

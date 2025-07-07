@@ -2,6 +2,7 @@ import replicate
 import os
 import sys
 from typing import Union, Optional, IO
+from io import BytesIO
 
 def image_to_video_with_replicate(
     image: Union[str, bytes, IO],
@@ -27,11 +28,13 @@ def image_to_video_with_replicate(
     def _to_file_or_url(val):
         if hasattr(val, "read"):
             return val  # file-like object
+        if isinstance(val, bytes):
+            return BytesIO(val)
         if isinstance(val, str):
             if val.startswith("http://") or val.startswith("https://"):
                 return val
             return open(val, "rb")
-        return val  # assume file-like or bytes
+        raise TypeError(f"Unsupported type for image: {type(val)}")
 
     input = {
         "image": _to_file_or_url(image),
