@@ -21,6 +21,8 @@ from routers import (
     replicate_iconic_art,
     image_to_video,
     visual_journal,
+    runware_image_to_video_router,
+    story_visualizer,
 )
 from database.sqlite import create_sqlite_db
 
@@ -63,6 +65,8 @@ app.include_router(replicate_style_transfer.router, prefix="/replicate_style_tra
 app.include_router(replicate_iconic_art.router, prefix="/replicate_iconic_art", tags=["replicate_iconic_art"])
 app.include_router(image_to_video.router, prefix="/image-to-video", tags=["image-to-video"])
 app.include_router(visual_journal.router, prefix="/visual-journal", tags=["visual-journal"])
+app.include_router(runware_image_to_video_router, prefix="/runware-image-to-video", tags=["runware-image-to-video"])
+app.include_router(story_visualizer.router, prefix="/story-visualizer", tags=["story-visualizer"])
 
 @app.get("/")
 def read_root():
