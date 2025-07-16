@@ -4,3 +4,4 @@ from . import replicate_style_transfer
 from . import replicate_iconic_art
 from routers.runware_image_to_video import router as runware_image_to_video_router
 from . import story_visualizer
+from routers.reimagine_art import router as reimagine_art_router
