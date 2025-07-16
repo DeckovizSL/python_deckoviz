@@ -23,6 +23,7 @@ from routers import (
     visual_journal,
     runware_image_to_video_router,
     story_visualizer,
+    runware_flux_tools,
 )
 from database.sqlite import create_sqlite_db
 
@@ -67,6 +68,7 @@ app.include_router(image_to_video.router, prefix="/image-to-video", tags=["image
 app.include_router(visual_journal.router, prefix="/visual-journal", tags=["visual-journal"])
 app.include_router(runware_image_to_video_router, prefix="/runware-image-to-video", tags=["runware-image-to-video"])
 app.include_router(story_visualizer.router, prefix="/story-visualizer", tags=["story-visualizer"])
+app.include_router(runware_flux_tools.router, prefix="/runware-flux-tools", tags=["Runware FLUX Tools"])
 
 @app.get("/")
 def read_root():
