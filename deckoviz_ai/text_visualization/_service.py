@@ -4,6 +4,7 @@ import re
 import pdfplumber
 from ._schemas import TextVisualizationInput, TextVisualizationOutput
 from ._prompt import generate_visualization_prompt
+from ..llm import GeminiLLM
 
 # Utility for paragraph splitting
 def split_into_paragraphs(text: str) -> List[str]:
@@ -12,8 +13,8 @@ def split_into_paragraphs(text: str) -> List[str]:
     return paras
 
 class TextVisualizationService:
-    def __init__(self):
-        pass  # Add model or LLM init if needed
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
+        self.llm = GeminiLLM(model_name=model_name)
 
     def extract_text_from_pdf(self, pdf_path: str, start_page: int, end_page: Optional[int] = None) -> List[str]:
         """
@@ -62,7 +63,7 @@ class TextVisualizationService:
     def split_text_by_paragraph(self, text: str) -> List[str]:
         return split_into_paragraphs(text)
 
-    def generate_prompts(self, data: TextVisualizationInput) -> TextVisualizationOutput:
+    def generate_prompts(self, data: TextVisualizationInput) -> List[str]:
         prompts = []
         if data.input_type == "text":
             if data.image_density != "1_image_per_paragraph":
@@ -71,8 +72,17 @@ class TextVisualizationService:
                 raise ValueError("Text input is required for input_type 'text'.")
             chunks = self.split_text_by_paragraph(data.text)
             for chunk in chunks:
-                prompt = generate_visualization_prompt(chunk, data.visualization_prompt)
-                prompts.append(prompt)
+                if not chunk:  # Skip empty chunks
+                    continue
+                # 1. Generate the full system prompt for the LLM
+                llm_input_prompt = generate_visualization_prompt(chunk, data.visualization_prompt)
+
+                # 2. Call the LLM to get the clean, final image prompt
+                final_image_prompt = self.llm._call(llm_input_prompt)
+
+                # 3. Clean up the LLM's output and add to the list
+                cleaned_prompt = final_image_prompt.strip().strip('`" ')
+                prompts.append(cleaned_prompt)
         elif data.input_type == "pdf":
             if not data.pdf_file_path:
                 raise ValueError("PDF file path is required for input_type 'pdf'.")
@@ -87,10 +97,19 @@ class TextVisualizationService:
             else:
                 raise ValueError("Invalid image_density for PDF input.")
             for chunk in chunks:
-                prompt = generate_visualization_prompt(chunk, data.visualization_prompt)
-                prompts.append(prompt)
+                if not chunk:  # Skip empty chunks
+                    continue
+                # 1. Generate the full system prompt for the LLM
+                llm_input_prompt = generate_visualization_prompt(chunk, data.visualization_prompt)
+
+                # 2. Call the LLM to get the clean, final image prompt
+                final_image_prompt = self.llm._call(llm_input_prompt)
+
+                # 3. Clean up the LLM's output and add to the list
+                cleaned_prompt = final_image_prompt.strip().strip('`" ')
+                prompts.append(cleaned_prompt)
         else:
             raise ValueError("Invalid input_type.")
-        return TextVisualizationOutput(prompts=prompts)
+        return prompts
 
     # Add more methods for prompt generation and image generation as needed 
