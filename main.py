@@ -26,6 +26,7 @@ from routers import (
     runware_flux_tools,
     reimagine_art_router,
     runware_text_to_video_router,
+    text_visualization,
 )
 from database.sqlite import create_sqlite_db
 
@@ -73,6 +74,7 @@ app.include_router(story_visualizer.router, prefix="/story-visualizer", tags=["s
 app.include_router(runware_flux_tools.router, prefix="/runware-flux-tools", tags=["Runware FLUX Tools"])
 app.include_router(reimagine_art_router, prefix="/reimagine-art", tags=["reimagine-art"])
 app.include_router(runware_text_to_video_router, prefix="/runware-text-to-video", tags=["runware-text-to-video"])
+app.include_router(text_visualization.router, prefix="/text-visualization", tags=["text-visualization"])
 
 @app.get("/")
 def read_root():

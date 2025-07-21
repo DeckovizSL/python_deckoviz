@@ -1,19 +1,28 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Query, Body
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Query, Body, Depends
 from fastapi.responses import JSONResponse
 import aiohttp
 import asyncio
 import base64
 import uuid
 import os
-from typing import List
+from typing import List, Optional, Literal
+from schemas.user import User
+from utils.token import get_current_user
 
 router = APIRouter(tags=["runware-image-to-video"])
 
 ALLOWED_RESOLUTIONS = [
-    (1280, 720),  # landscape
-    (720, 1280),  # portrait
-    (720, 720),   # square
+    (1280, 720),  # landscape 16:9
+    (405, 720),   # portrait 9:16
+    (720, 720),   # square 1:1
 ]
+
+STYLE_PROMPTS = {
+    "3d": "A 3D animated scene of {subject}, Pixar style, high quality, detailed lighting, smooth motion",
+    "2d": "A 2D cartoon animation of {subject}, vibrant colors, hand-drawn style, smooth animation",
+    "cinematic": "A cinematic shot of {subject}, dramatic lighting, film look, shallow depth of field, high resolution",
+    "motion": "A dynamic action scene of {subject}, motion blur, fast camera movement, energetic, realistic lighting"
+}
 
 @router.post(
     "/generate",
@@ -23,33 +32,45 @@ ALLOWED_RESOLUTIONS = [
 )
 async def runware_image_to_video_generate(
     image_files: List[UploadFile] = File(..., description="Image files for key frames (ordered; at least 1, typically 2 for first/last frame). Recommended: 2 images for best results."),
-    positivePrompt: str = Form(..., description="Text prompt describing the video content. Be specific for best results."),
+    positivePrompt: str = Form(..., description="Text prompt describing the video content. Be specific for best results. If 'style' is provided, this will be used as the subject for the style template."),
     duration: int = Form(..., description="Duration of the video in seconds. See model limits (e.g., 5-10s typical)."),
-    width: int = Form(..., description="Width of the video. Allowed: 1280, 720."),
-    height: int = Form(..., description="Height of the video. Allowed: 720, 1280."),
+    width: int = Form(..., description="Width of the video. Must match one of the allowed resolutions."),
+    height: int = Form(..., description="Height of the video. Must match one of the allowed resolutions."),
+    style: Optional[Literal["3d", "2d", "cinematic", "motion"]] = Form(None, description="Optional style preset: '3d', '2d', 'cinematic', or 'motion'. If provided, will override the prompt with a style-specific template."),
+    current_user: User = Depends(get_current_user),
 ):
     """
     ### Runware Video Generation (Image-to-Video)
+    **Authentication required.** Only logged-in users can access this endpoint.
+
     Submit a video generation task using one or more images as keyframes and a text prompt.
 
+    **Style Option:**
+    - You can optionally specify a style: '3d', '2d', 'cinematic', or 'motion'.
+    - If style is provided, the positivePrompt will be generated using a style-specific template and your input will be used as the subject.
+    - If style is not provided, the positivePrompt will be used as given (current behavior).
+
     **Recommended Flow:**
-    1. **POST** to `/runware-image-to-video/generate` with your images and prompt.
+    1. **POST** to `/runware-image-to-video/generate` with your images and prompt (and optional style).
     2. Receive a `taskUUID` in the response.
     3. **POST** to `/runware-image-to-video/get-response` with the `taskUUID` to poll for status.
     4. When status is `success`, retrieve the `videoURL` from the response.
 
     **Parameters:**
     - `image_files`: List of images (UploadFile). Use 2 images for first/last frame anchoring.
-    - `positivePrompt`: Text prompt describing the video.
+    - `positivePrompt`: Text prompt describing the video, or the subject if style is provided.
+    - `style`: Optional. One of '3d', '2d', 'cinematic', 'motion'.
     - `duration`: Video duration in seconds (model-dependent, e.g., 5-10s typical).
-    - `width`, `height`: Video resolution. Allowed: 1280x720, 720x1280, 720x720.
+    - `width`, `height`: Video resolution. Allowed combinations: 1280x720 (landscape), 405x720 (portrait), 720x720 (square).
 
     **Example Request (POSTMAN):**
     - Method: POST
     - URL: `/runware-image-to-video/generate`
+    - Headers: `Authorization: Bearer <your_token>`
     - Form-data:
         - image_files: [file1.png, file2.png]
-        - positivePrompt: "A cat playing piano, cinematic, high quality"
+        - positivePrompt: "a cat playing piano"
+        - style: "3d" (optional)
         - duration: 6
         - width: 1280
         - height: 720
@@ -68,8 +89,13 @@ async def runware_image_to_video_generate(
     if (width, height) not in ALLOWED_RESOLUTIONS:
         raise HTTPException(
             status_code=400,
-            detail="Only the following resolutions are supported: 1280x720, 720x1280, 720x720."
+            detail=f"Unsupported resolution: {width}x{height}. Allowed resolutions are: 1280x720, 405x720, 720x720."
         )
+    # Compose the prompt
+    if style and style in STYLE_PROMPTS:
+        prompt = STYLE_PROMPTS[style].format(subject=positivePrompt)
+    else:
+        prompt = positivePrompt
     task_uuid = str(uuid.uuid4())
     try:
         # Read all image files as bytes and encode as base64
@@ -87,7 +113,7 @@ async def runware_image_to_video_generate(
         request_obj = {
             "taskType": "videoInference",
             "taskUUID": task_uuid,
-            "positivePrompt": positivePrompt,
+            "positivePrompt": prompt,
             "duration": duration,
             "width": width,
             "height": height,
@@ -134,10 +160,13 @@ async def runware_image_to_video_generate(
     tags=["runware-image-to-video"],
 )
 async def runware_get_response(
-    body: dict = Body(..., example={"taskUUID": "24cd5dff-cb81-4db5-8506-b72a9425f9d1"}, description="JSON body with the taskUUID you received from /generate. Use this endpoint to poll for completion.")
+    body: dict = Body(..., example={"taskUUID": "24cd5dff-cb81-4db5-8506-b72a9425f9d1"}, description="JSON body with the taskUUID you received from /generate. Use this endpoint to poll for completion."),
+    current_user: User = Depends(get_current_user),
 ):
     """
     ### Poll for Video Generation Result (Runware)
+    **Authentication required.** Only logged-in users can access this endpoint.
+
     After submitting a video generation task, use this endpoint to check the status and retrieve the video URL when ready.
 
     **Recommended Flow:**
@@ -151,6 +180,7 @@ async def runware_get_response(
     **Example Request (POSTMAN):**
     - Method: POST
     - URL: `/runware-image-to-video/get-response`
+    - Headers: `Authorization: Bearer <your_token>`
     - Body (raw, JSON):
       ```json
       { "taskUUID": "24cd5dff-cb81-4db5-8506-b72a9425f9d1" }
@@ -198,4 +228,4 @@ async def runware_get_response(
                 poll_result = await poll_resp.json()
             except Exception as e:
                 return JSONResponse(status_code=500, content={"status": "error", "error": f"Failed to parse response: {poll_text}"})
-            return JSONResponse(content=poll_result) 
+            return JSONResponse(content=poll_result)
