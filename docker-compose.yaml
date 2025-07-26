@@ -6,7 +6,7 @@ services:
     image: deckoviz_ai
     env_file:
       - .env
-    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082", "--reload"]
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082", "--reload", "--timeout-keep-alive", "300", "--timeout-graceful-shutdown", "30"]
     ports:
       - "8082:8082"
     volumes:
@@ -52,4 +52,5 @@ services:
       - ./:/app 
 networks:
   decoviz_common_default: 
-    driver: bridge
+    external: true
+    name: python_deckoviz_decoviz_common_default

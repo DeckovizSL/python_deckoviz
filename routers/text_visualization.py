@@ -5,6 +5,8 @@ from runware import Runware, IImageInference
 import os
 import tempfile
 from typing import Optional
+from utils.token import get_current_user
+from schemas.user import User
 
 # The prefix is removed here and handled in main.py to avoid a double prefix.
 router = APIRouter(tags=["text-visualization"])
@@ -13,7 +15,8 @@ service = TextVisualizationService()
 @router.post("/generate", response_model=TextVisualizationOutput)
 async def generate_text_visualization(
     req: TextVisualizationRequestData = Depends(),
-    pdf_file: Optional[UploadFile] = File(None, description="Required if input_type is 'pdf'. The PDF file to upload.")
+    pdf_file: Optional[UploadFile] = File(None, description="Required if input_type is 'pdf'. The PDF file to upload."),
+    current_user: User = Depends(get_current_user)
 ):
     """
     ### Generate Visualizations from Text or PDF

@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 from redis import Redis
 from utils.settings import get_settings
 from langchain.schema import HumanMessage 
+from utils.token import get_current_user
+from schemas.user import User 
 
 load_dotenv()
  
@@ -71,7 +73,7 @@ async def get_onboarding_page(request: Request):
     return templates.TemplateResponse("onboarding.html", {"request": request})
 
 @router.get("/start-onboarding-api")
-async def start_onboarding_api(user_id: str, db: Session = Depends(get_db)):
+async def start_onboarding_api(user_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Start a new onboarding session and return JSON response"""
     session_id = str(uuid.uuid4())
     
@@ -97,7 +99,7 @@ async def start_onboarding_api(user_id: str, db: Session = Depends(get_db)):
     return {"session_id": session_id, "status": "started"}
 
 @router.post("/start-onboarding")
-async def start_onboarding(user_id: str, db: Session = Depends(get_db)):
+async def start_onboarding(user_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Start a new onboarding session"""
     session_id = str(uuid.uuid4())
     
@@ -250,7 +252,7 @@ async def process_speech():
     return voice_handler.generate_twiml_response(response_message)
 
 @router.get("/session/{session_id}/status")
-async def get_session_status(session_id: str, db: Session = Depends(get_db)):
+async def get_session_status(session_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Get session status"""
     session = db.query(OnboardingSession).filter(OnboardingSession.session_id == session_id).first()
     if not session:

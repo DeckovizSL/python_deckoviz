@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 import os
 from schemas.image import GenerateRequest, GenerateResponse
 from  genai.personal_painter import process_emotion_and_generate_art, PersonalPainter
 from dotenv import load_dotenv
+from utils.token import get_current_user
+from schemas.user import User
 
 load_dotenv()
 
@@ -10,7 +12,7 @@ router = APIRouter(prefix="")
 
 
 @router.post("/create-art", response_model=GenerateResponse)
-async def generate_image(req: GenerateRequest):
+async def generate_image(req: GenerateRequest, current_user: User = Depends(get_current_user)):
     # Initialize Personal Painter
     api_key = os.getenv("STABILITY_API_KEY")
     if not api_key:

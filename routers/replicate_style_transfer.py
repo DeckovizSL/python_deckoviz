@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Form
+from fastapi import APIRouter, File, UploadFile, Form, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional
 import os
@@ -7,6 +7,8 @@ import tempfile
 import sys
 from deckoviz_ai.replicate_style_transfer._replicate_style_transfer import style_transfer_with_replicate
 from utils.settings import get_settings
+from utils.token import get_current_user
+from schemas.user import User
 
 router = APIRouter()
 settings = get_settings()
@@ -23,7 +25,8 @@ async def replicate_style_transfer(
     style_strength: Optional[float] = Form(None),
     negative_prompt: Optional[str] = Form(None),
     structure_strength: Optional[float] = Form(None),
-    num_inference_steps: Optional[int] = Form(None)
+    num_inference_steps: Optional[int] = Form(None),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         with tempfile.TemporaryDirectory() as tmpdir:

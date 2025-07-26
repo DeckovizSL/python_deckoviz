@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from deckoviz_ai.runware_flux_tools._service import RunwareFluxToolsService
 from deckoviz_ai.runware_flux_tools._schemas import FluxFillRequest, FluxCannyRequest, FluxDepthRequest, FluxReduxRequest, FluxImageResponse
 from deckoviz_ai.runware_flux_tools._prompt import build_flux_prompt
 import base64
 import logging
+from utils.token import get_current_user
+from schemas.user import User
 
 router = APIRouter(tags=["Runware FLUX Tools"])
 
@@ -17,7 +19,8 @@ async def flux_fill(
     mask: UploadFile = File(...),
     width: int = Form(1024),
     height: int = Form(1024),
-    steps: int = Form(30)
+    steps: int = Form(30),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         image_b64 = base64.b64encode(await image.read()).decode()
@@ -36,7 +39,8 @@ async def flux_canny(
     image: UploadFile = File(...),
     width: int = Form(1024),
     height: int = Form(1024),
-    steps: int = Form(30)
+    steps: int = Form(30),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         image_b64 = base64.b64encode(await image.read()).decode()
@@ -54,7 +58,8 @@ async def flux_depth(
     image: UploadFile = File(...),
     width: int = Form(1024),
     height: int = Form(1024),
-    steps: int = Form(30)
+    steps: int = Form(30),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         image_b64 = base64.b64encode(await image.read()).decode()
@@ -72,7 +77,8 @@ async def flux_redux(
     image: UploadFile = File(...),
     width: int = Form(1024),
     height: int = Form(1024),
-    steps: int = Form(30)
+    steps: int = Form(30),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         image_b64 = base64.b64encode(await image.read()).decode()

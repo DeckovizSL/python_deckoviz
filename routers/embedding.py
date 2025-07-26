@@ -1,14 +1,16 @@
-from fastapi import APIRouter 
+from fastapi import APIRouter, Depends
 from deckoviz_ai.embeddings import JSONEmbedder
 from fastapi.responses import JSONResponse
 from typing import List 
+from utils.token import get_current_user
+from schemas.user import User 
 
 
 router = APIRouter()
 
 
 @router.post("/from-json")
-async def generate_embedding(body: dict, model_name: str = 'all-MiniLM-L6-v2'):
+async def generate_embedding(body: dict, model_name: str = 'all-MiniLM-L6-v2', current_user: User = Depends(get_current_user)):
     """
     Generate embedding from JSON data\n
     
@@ -25,7 +27,7 @@ async def generate_embedding(body: dict, model_name: str = 'all-MiniLM-L6-v2'):
         return JSONResponse(content={"error": str(e)},status_code=500)
 
 @router.post("/from-json-batch")
-async def generate_embedding_batch(body: List[dict], model_name: str = 'all-MiniLM-L6-v2'):
+async def generate_embedding_batch(body: List[dict], model_name: str = 'all-MiniLM-L6-v2', current_user: User = Depends(get_current_user)):
     """
     Generate embeddings from a batch of JSON data\n
     

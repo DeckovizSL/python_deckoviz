@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Form
+from fastapi import APIRouter, File, UploadFile, Form, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional
 import os
@@ -7,6 +7,8 @@ import tempfile
 import sys
 from deckoviz_ai.iconic_art._replicate_iconic_art import personalize_iconic_art_with_replicate
 from utils.settings import get_settings
+from utils.token import get_current_user
+from schemas.user import User
 
 router = APIRouter()
 settings = get_settings()
@@ -21,7 +23,8 @@ async def personalize_iconic_art(
     style: Optional[str] = Form(None),
     num_inference_steps: Optional[int] = Form(None),
     guidance_scale: Optional[float] = Form(None),
-    seed: Optional[int] = Form(None)
+    seed: Optional[int] = Form(None),
+    current_user: User = Depends(get_current_user)
 ):
     try:
         with tempfile.TemporaryDirectory() as tmpdir:

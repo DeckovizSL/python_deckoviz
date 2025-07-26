@@ -27,14 +27,24 @@ from routers import (
     reimagine_art_router,
     runware_text_to_video_router,
     text_visualization,
+    storyboard
 )
 from database.sqlite import create_sqlite_db
+from database.connection import Base, engine
+from models.storyboard import Storyboard, StoryboardFrame
+from middleware.usage_tracking import add_usage_tracking_middleware
+import os
 
 # Initialize database
 create_sqlite_db()
 
+# Create the storyboard tables
+Storyboard.metadata.create_all(bind=engine)
+StoryboardFrame.metadata.create_all(bind=engine)
+
+# Create the FastAPI app
 app = FastAPI(title="Deckoviz AI API", 
-              description="AI services for Deckoviz platform", 
+              description="AI services for Deckoviz platform with usage tracking", 
               version="0.1.0")
 
 # Configure CORS
@@ -45,12 +55,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add usage tracking middleware (connects to Django backend)
+django_backend_url = os.getenv("DJANGO_BACKEND_URL", "http://common:8000")
+add_usage_tracking_middleware(app, django_backend_url)
  
  
 # Include routers
 app.include_router(audio.router, prefix="/audio", tags=['Audio Processing'])
 # app.include_router(image.router, prefix="/personal-painter", tags=['Personal Painter'])
 app.include_router(onboard.router, prefix="/onboard", tags=["onboard"])
+app.include_router(storyboard.router)
 app.include_router(style_transfer.router, prefix="/style_transfer", tags=["style_transfer"])
 app.include_router(painter_chat.router, prefix="/painter_chat", tags=["painter_chat"])
 app.include_router(embedding.router, prefix="/embedding", tags=["embedding"])

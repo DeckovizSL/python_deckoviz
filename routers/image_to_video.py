@@ -1,7 +1,9 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from deckoviz_ai.image_to_video._service import generate_video_from_image
 from typing import Optional
 import os
+from utils.token import get_current_user
+from schemas.user import User
 
 router = APIRouter(tags=["image-to-video"])
 
@@ -18,7 +20,8 @@ def generate_image_to_video(
     sample_steps: Optional[int] = Form(None),
     frames_per_second: Optional[int] = Form(None),
     sample_guide_scale: Optional[int] = Form(None),
-    api_token: Optional[str] = Form(None)
+    api_token: Optional[str] = Form(None),
+    current_user: User = Depends(get_current_user)
 ):
     # Prefer file upload, fallback to URL
     if image is not None:

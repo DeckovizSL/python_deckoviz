@@ -1,10 +1,12 @@
 from genai.assembly_ai import AudioProcessor
 from genai.audio_analysis import TranscriptAnalyzer
-from fastapi import APIRouter, HTTPException, BackgroundTasks, File, UploadFile
+from fastapi import APIRouter, HTTPException, BackgroundTasks, File, UploadFile, Depends
 from schemas.audio import (
     TranscriptionRequest, TranscriptionResponse,
     AnalysisRequest, AnalysisResponse
 )
+from utils.token import get_current_user
+from schemas.user import User
 import logging
 import shutil
 import os
@@ -21,7 +23,7 @@ AUDIO_DIR = "data/audio"
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
 @router.post("/transcribe", response_model=TranscriptionResponse)
-async def transcribe_audio(request: TranscriptionRequest, background_tasks: BackgroundTasks):
+async def transcribe_audio(request: TranscriptionRequest, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
     """Transcribe audio from a URL with optional analysis"""
     try:
         logger.info(f"Transcribing audio from URL: {request.audio_url}")
@@ -51,7 +53,7 @@ async def transcribe_audio(request: TranscriptionRequest, background_tasks: Back
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/transcribe-file", response_model=TranscriptionResponse)
-async def transcribe_audio_file(file: UploadFile = File(...)):
+async def transcribe_audio_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     """Transcribe audio from an uploaded file."""
     try:
         file_path = os.path.join(AUDIO_DIR, file.filename)
@@ -84,7 +86,7 @@ async def transcribe_audio_file(file: UploadFile = File(...)):
         pass
 
 @router.post("/analyze", response_model=AnalysisResponse)
-async def analyze_transcript(request: AnalysisRequest):
+async def analyze_transcript(request: AnalysisRequest, current_user: User = Depends(get_current_user)):
     """Analyze a transcript to generate insights"""
     try:
         if not request.transcript or len(request.transcript.strip()) < 10:
@@ -102,7 +104,7 @@ async def analyze_transcript(request: AnalysisRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/summarize", response_model=dict)
-async def summarize_transcript(request: dict):
+async def summarize_transcript(request: dict, current_user: User = Depends(get_current_user)):
     """Generate a summary of a transcript"""
     try:
         if not request.get("text") or len(request["text"].strip()) < 50:

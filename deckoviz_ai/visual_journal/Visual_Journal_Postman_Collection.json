@@ -1,0 +1,344 @@
+{
+  "info": {
+    "name": "Visual Journal API",
+    "description": "API collection for testing the Visual Journal feature",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "YOUR_JWT_TOKEN_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Generate Visual Journal Entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Today was heavy. I woke up anxious, couldn't focus much. But the evening walk with my dog helped. The sky was soft pink. I felt some light return. I want to feel more like that tomorrow.\",\n  \"width\": 768,\n  \"height\": 768,\n  \"num_frames\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Generate a visual journal entry based on user's daily reflection"
+      },
+      "response": []
+    },
+    {
+      "name": "Positive Day Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Amazing day! Got promoted at work, had lunch with friends, and finally finished my painting. Feel so accomplished and grateful. The sun was shining and everything felt possible.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example of a positive, energetic day"
+      },
+      "response": []
+    },
+    {
+      "name": "Reflective Day Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Been thinking a lot about my relationship with my sister. We haven't talked in months. Miss her but too proud to reach out first. The rain outside matches my mood.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example of a reflective, melancholic day"
+      },
+      "response": []
+    },
+    {
+      "name": "Mixed Emotions Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Work was incredibly stressful today, deadlines everywhere. But came home to my cat purring on my lap and homemade soup. Small moments of joy in difficult times. Tomorrow is a new day.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example of a day with mixed emotions"
+      },
+      "response": []
+    },
+    {
+      "name": "Custom Dimensions Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Watched the sunrise from my balcony this morning. The colors were incredible - orange, pink, and purple painting the sky. Made me feel grateful for another day.\",\n  \"width\": 1024,\n  \"height\": 768\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example with custom dimensions (1024x768) for landscape orientation"
+      },
+      "response": []
+    },
+    {
+      "name": "Portrait Dimensions Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Had a deep conversation with my friend today. We sat by the old oak tree in the park, sharing stories and dreams. Felt so connected.\",\n  \"width\": 768,\n  \"height\": 1024\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example with portrait dimensions (768x1024) for vertical orientation"
+      },
+      "response": []
+    },
+    {
+      "name": "Multiple Frames Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Today started rough with a difficult meeting, but then I had lunch with my best friend and we laughed so much. Ended the day watching sunset from my balcony feeling grateful.\",\n  \"width\": 1024,\n  \"height\": 768,\n  \"num_frames\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/visual-journal/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            ""
+          ]
+        },
+        "description": "Example with multiple frames (3) to capture different moments"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Journal Timeline",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/visual-journal/timeline?limit=10",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            "timeline"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        },
+        "description": "Get the user's visual journal timeline/history with grouped frame information"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Specific Journal Entry",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/visual-journal/{{entry_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "visual-journal",
+            "{{entry_id}}"
+          ]
+        },
+        "description": "Get a specific journal entry by ID"
+      },
+      "response": []
+    }
+  ]
+}

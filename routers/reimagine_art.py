@@ -1,9 +1,11 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from fastapi.responses import JSONResponse
 import base64
 import os
 from typing import Optional
 from runware import Runware, IImageInference
+from utils.token import get_current_user
+from schemas.user import User
 
 router = APIRouter(tags=["reimagine-art"])
 
@@ -18,6 +20,7 @@ async def reimagine_art(
     style: str = Form(..., description="Art style to apply, e.g. 'anime', 'cartoon', 'impressionist', etc."),
     height: Optional[int] = Form(768, description="Height of the output image. Default: 1344."),
     width: Optional[int] = Form(1344, description="Width of the output image. Default: 768."),
+    current_user: User = Depends(get_current_user)
 ):
     """
     ### Reimagine a Photo in a Custom Art Style (Runware)
