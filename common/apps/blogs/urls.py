@@ -1,6 +1,6 @@
 from django.urls import include,path 
 from rest_framework.routers import DefaultRouter
-from apps.blogs import views
+from common.apps.blogs import views
 
 
 router = DefaultRouter()

@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Mode, UserMode, Session, Music
-from apps.gallery.models import Collection, Audio
+from common.apps.gallery.models import Collection, Audio
 from .serializers import ModeSerializer, UserModeSerializer, SessionSerializer, UserModeUpdateSerializer
 from django.shortcuts import get_object_or_404
 

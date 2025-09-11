@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import timedelta
-from apps.analytics.models import FeatureUsage, DailyUserStats
+from common.apps.analytics.models import FeatureUsage, DailyUserStats
 from collections import defaultdict
 
 

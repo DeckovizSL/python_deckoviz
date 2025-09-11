@@ -10,7 +10,7 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 
-from apps.gallery.models import Collection, Image, CollectionImage, Audio
+from common.apps.gallery.models import Collection, Image, CollectionImage, Audio
 from .forms import (
     CollectionForm, ImageUploadForm, CollectionImageForm, 
     CollectionWithImagesForm, LoginForm, RegistrationForm

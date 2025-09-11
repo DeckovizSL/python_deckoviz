@@ -1,5 +1,5 @@
-from apps.common.models import UserProfile
-from apps.common.serializers import UserProfileSerializer
+from common.apps.authentication.models import UserProfile
+from common.apps.authentication.serializers import UserProfileSerializer
 from rest_framework import serializers
 from .models import Review
 from django.contrib.auth import get_user_model

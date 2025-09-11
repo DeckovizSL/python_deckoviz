@@ -319,7 +319,7 @@ def get_feature_cost(request, feature_name):
         
     except FeaturePricing.DoesNotExist:
         # Fallback to default pricing
-        from apps.credits.services import CreditService
+        from common.apps.credits.services import CreditService
         category = FeatureUsageTracker.get_feature_category(feature_name)
         cost = CreditService.get_operation_cost(category, 1)
         

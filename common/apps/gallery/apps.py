@@ -6,4 +6,4 @@ class GalleryConfig(AppConfig):
     name = 'common.apps.gallery'
 
     def ready(self):
-        import apps.gallery.signals
+        import common.apps.gallery.signals

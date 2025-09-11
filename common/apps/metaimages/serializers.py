@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import MetaImage
-from apps.gallery.serializers import ImageSerializer
+from common.apps.gallery.serializers import ImageSerializer
 
 class MetaImageSerializer(serializers.ModelSerializer):
     liked_images = ImageSerializer(many=True, read_only=True)
@@ -39,7 +39,7 @@ class AddToLikedSerializer(serializers.Serializer):
     image_id = serializers.UUIDField()
 
     def validate_image_id(self, value):
-        from apps.gallery.models import Image
+        from common.apps.gallery.models import Image
         if not Image.objects.filter(id=value).exists():
             raise serializers.ValidationError("Image does not exist.")
         return value
@@ -48,7 +48,7 @@ class AddToStarredSerializer(serializers.Serializer):
     image_id = serializers.UUIDField()
 
     def validate_image_id(self, value):
-        from apps.gallery.models import Image
+        from common.apps.gallery.models import Image
         if not Image.objects.filter(id=value).exists():
             raise serializers.ValidationError("Image does not exist.")
         return value
@@ -58,7 +58,7 @@ class ShareImageSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate(self, data):
-        from apps.gallery.models import Image
+        from common.apps.gallery.models import Image
         from django.contrib.auth import get_user_model
         User = get_user_model()
         if not Image.objects.filter(id=data['image_id']).exists():

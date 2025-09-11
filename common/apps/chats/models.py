@@ -1,5 +1,5 @@
 from django.db import models
-from apps.authentication.models import TimeStampedModel
+from common.apps.authentication.models import TimeStampedModel
 from django.contrib.auth import get_user_model
 
 

@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import MetaAudio
 from .serializers import MetaAudioSerializer, AddToLikedAudioSerializer, AddToStarredAudioSerializer
-from apps.gallery.models import Audio
+from common.apps.gallery.models import Audio
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 

@@ -848,3 +848,13 @@ REQUEST 2025-07-29 14:59:13 [INFO] "GET /api/schema/swagger-ui/ HTTP/1.1" 200 42
 REQUEST 2025-07-29 14:59:15 [INFO] START GET /api/schema/ | User: anonymous | IP: 172.18.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Sa
 REQUEST 2025-07-29 14:59:16 [INFO] END GET /api/schema/ | Status: 200 | User: anonymous | Duration: 0.673s
 REQUEST 2025-07-29 14:59:16 [INFO] "GET /api/schema/ HTTP/1.1" 200 404779
+REQUEST 2025-09-11 19:12:17 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-11 19:12:17 [ERROR] ERROR GET / | User: anonymous | Duration: 0.006s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-11 19:12:17 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.033s
+REQUEST 2025-09-11 19:12:17 [WARNING] Not Found: /
+REQUEST 2025-09-11 19:12:17 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-11 19:14:18 [INFO] START GET /admin | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-11 19:14:18 [ERROR] ERROR GET /admin | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\admin” does not exist
+REQUEST 2025-09-11 19:14:18 [INFO] END GET /admin | Status: 404 | User: anonymous | Duration: 0.007s
+REQUEST 2025-09-11 19:14:18 [WARNING] Not Found: /admin
+REQUEST 2025-09-11 19:14:18 [WARNING] "GET /admin HTTP/1.1" 404 5536

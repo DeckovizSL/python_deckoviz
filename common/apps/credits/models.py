@@ -1,5 +1,5 @@
 from django.db import models
-from apps.authentication.models import User, BaseModel
+from common.apps.authentication.models import User, BaseModel
 from django.contrib.postgres.fields import ArrayField   
 
 class CreditPackage(BaseModel):

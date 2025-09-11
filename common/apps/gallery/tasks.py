@@ -1,11 +1,11 @@
 from celery import shared_task
 import json
 import logging
-from apps.gallery.models import Audio
+from common.apps.gallery.models import Audio
 from django.utils import timezone
-from apps.utils.decoviz_ai import AIClient
-from apps.utils.storage import Storage
-from apps.utils.unsplash_client import UnsplashClient
+from common.apps.utils.decoviz_ai import AIClient
+from common.apps.utils.storage import Storage
+from common.apps.utils.unsplash_client import UnsplashClient
 from .models import Image
 
 search_queries=['nature', 'people', 'food', 'travel', 'architecture', 'animals']

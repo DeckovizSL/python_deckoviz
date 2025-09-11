@@ -2,8 +2,8 @@ from django.db import transaction
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from .models import FeatureUsage, UserSession, DailyUserStats, FeaturePricing
-from apps.credits.services import CreditService
-from apps.credits.models import CreditAIOperation
+from common.apps.credits.services import CreditService
+from common.apps.credits.models import CreditAIOperation
 import logging
 import uuid
 import json

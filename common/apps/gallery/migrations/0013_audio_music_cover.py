@@ -1,5 +1,5 @@
 from django.db import migrations, models
-import apps.utils.user_directory._user_directory_path
+import common.apps.utils.user_directory._user_directory_path
 
 class Migration(migrations.Migration):
 
@@ -11,6 +11,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='audio',
             name='music_cover',
-            field=models.ImageField(upload_to=apps.utils.user_directory._user_directory_path.user_image_path, blank=True, null=True, max_length=500, help_text="Optional cover photo for the audio"),
+            field=models.ImageField(upload_to=common.apps.utils.user_directory._user_directory_path.user_image_path, blank=True, null=True, max_length=500, help_text="Optional cover photo for the audio"),
         ),
     ] 

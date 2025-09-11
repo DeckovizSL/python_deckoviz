@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.db import IntegrityError
 from .models import Cart
-from apps.gallery.serializers import ImageSerializer
-from apps.marketplace.serializers import PriceSerializer
+from common.apps.gallery.serializers import ImageSerializer
+from common.apps.marketplace.serializers import PriceSerializer
 
 class CartSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()

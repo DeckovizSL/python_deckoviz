@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Mode, UserMode, Session, Music
-from apps.gallery.models import Collection, Audio
-from apps.gallery.serializers import CollectionSerializer, AudioSerializer
+from common.apps.gallery.models import Collection, Audio
+from common.apps.gallery.serializers import CollectionSerializer, AudioSerializer
 
 class MusicSerializer(serializers.ModelSerializer):
     class Meta:

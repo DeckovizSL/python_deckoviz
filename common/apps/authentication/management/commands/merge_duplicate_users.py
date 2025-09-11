@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 # This needs to be done for ALL related models.
                 # Example for a 'Collection' model. You must add all other models.
                 #
-                # from apps.gallery.models import Collection
+                # from common.apps.gallery.models import Collection
                 # Collection.objects.filter(user=dup_user).update(user=primary_user)
                 #
                 # You must do this for every model that has a ForeignKey to User.

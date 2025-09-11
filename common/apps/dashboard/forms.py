@@ -1,5 +1,5 @@
 from django import forms
-from apps.gallery.models import Collection, Image, CollectionImage
+from common.apps.gallery.models import Collection, Image, CollectionImage
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError

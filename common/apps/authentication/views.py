@@ -5,7 +5,7 @@ from rest_framework import mixins,viewsets,status,generics
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.contrib.auth import get_user_model
 from .models import Address,NewsLetterSubscriber,UserProfile, PasswordResetToken, EmailVerificationToken
-from apps.utils.google_sheet import GoogleSheet
+from common.apps.utils.google_sheet import GoogleSheet
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from social_django.utils import load_strategy, load_backend

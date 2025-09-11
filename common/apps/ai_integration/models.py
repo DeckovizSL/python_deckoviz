@@ -1,5 +1,5 @@
 from django.db import models
-from apps.authentication.models import User, BaseModel
+from common.apps.authentication.models import User, BaseModel
 
 class AIModel(BaseModel):
     """AI models available for different operations"""

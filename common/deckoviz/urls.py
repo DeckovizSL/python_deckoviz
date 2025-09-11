@@ -39,52 +39,52 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
     
     #authentication api
-    path('auth/',include('apps.authentication.urls')),
+    path('auth/',include('common.apps.authentication.urls')),
     
     # gallery api
-    path('gallery/', include('apps.gallery.urls')), 
+    path('gallery/', include('common.apps.gallery.urls')), 
     
     #cart api
-    path('carts/', include('apps.carts.urls')),
+    path('carts/', include('common.apps.carts.urls')),
     
     #marketplace api
-    path('marketplace/', include('apps.marketplace.urls')),
+    path('marketplace/', include('common.apps.marketplace.urls')),
     
     #orders api
-    path('order/', include('apps.orders.urls')),
+    path('order/', include('common.apps.orders.urls')),
     
     #payments api
-    path('payment/', include('apps.payments.urls')),
+    path('payment/', include('common.apps.payments.urls')),
 
     #credits api
-    path('credits/', include('apps.credits.urls')),
+    path('credits/', include('common.apps.credits.urls')),
 
     # ai integration api
-    path('ai/', include('apps.ai_integration.urls')),
+    path('ai/', include('common.apps.ai_integration.urls')),
 
     #blogs api
-    path('blogs/',include('apps.blogs.urls')),
+    path('blogs/',include('common.apps.blogs.urls')),
     
     # metacollections api
-    path('metacollections/', include('apps.metacollections.urls')),
+    path('metacollections/', include('common.apps.metacollections.urls')),
 
     # modes api
-    path('modes/', include('apps.modes.urls')),
+    path('modes/', include('common.apps.modes.urls')),
 
     # dashboard app
-    path('dashboard/', include('apps.dashboard.urls')),
+    path('dashboard/', include('common.apps.dashboard.urls')),
 
     # metaimages api
-    path('metaimages/', include('apps.metaimages.urls')),
+    path('metaimages/', include('common.apps.metaimages.urls')),
 
     # metaaudios api
-    path('metaaudios/', include('apps.metaaudios.urls')),
+    path('metaaudios/', include('common.apps.metaaudios.urls')),
 
     # curations api
-    path('curations/', include('apps.curations.urls')),
+    path('curations/', include('common.apps.curations.urls')),
 
     # analytics api
-    path('api/analytics/', include('apps.analytics.urls')),
+    path('api/analytics/', include('common.apps.analytics.urls')),
      
     #api documentation view
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

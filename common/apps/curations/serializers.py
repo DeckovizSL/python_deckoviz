@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CuratedImages, CuratedCollections
-from apps.gallery.serializers import ImageSerializer, CollectionSerializer
+from common.apps.gallery.serializers import ImageSerializer, CollectionSerializer
 
 
 class CuratedImagesSerializer(serializers.ModelSerializer):

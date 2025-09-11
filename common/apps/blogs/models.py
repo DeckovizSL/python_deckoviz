@@ -1,7 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField
-from apps.authentication.models import BaseModel
+from common.apps.authentication.models import BaseModel
 import uuid
 
 class Asset(models.Model):

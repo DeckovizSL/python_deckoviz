@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 import uuid
-from apps.utils.choices import NOTIFICATION_TYPES
+from common.apps.utils.choices import NOTIFICATION_TYPES
 
 
 User = get_user_model()

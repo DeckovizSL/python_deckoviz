@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.modes.models import Mode
+from common.apps.modes.models import Mode
 
 class Command(BaseCommand):
     help = 'Creates the default modes in the database'

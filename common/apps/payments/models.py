@@ -1,6 +1,6 @@
-from apps.authentication.models import BaseModel
+from common.apps.authentication.models import BaseModel
 from django.db import models
-from apps.utils.choices import PAYMENT_METHOD_CHOICES, PAYMENT_STATUS_CHOICES
+from common.apps.utils.choices import PAYMENT_METHOD_CHOICES, PAYMENT_STATUS_CHOICES
 from .managers import TransactionManager
 
 class Transaction(BaseModel):

@@ -27,7 +27,7 @@ class CuratedImagesAdmin(admin.ModelAdmin):
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'images':
-            from apps.gallery.models import Image
+            from common.apps.gallery.models import Image
             kwargs["queryset"] = Image.objects.filter(is_active=True)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
@@ -62,7 +62,7 @@ class CuratedCollectionsAdmin(admin.ModelAdmin):
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'collections':
-            from apps.gallery.models import Collection
+            from common.apps.gallery.models import Collection
             kwargs["queryset"] = Collection.objects.filter(is_active=True, view='public')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     

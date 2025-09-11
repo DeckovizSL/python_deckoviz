@@ -1,6 +1,6 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
-from apps.credits.services import CreditService
+from common.apps.credits.services import CreditService
 from .services import AIService
 import logging
 import json

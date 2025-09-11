@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from apps.blogs.models import Blog
-from apps.blogs.serializers import BlogSerializer
+from common.apps.blogs.models import Blog
+from common.apps.blogs.serializers import BlogSerializer
 from rest_framework import mixins,viewsets 
 from rest_framework.permissions import  AllowAny
 

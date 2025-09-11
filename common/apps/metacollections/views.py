@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import MetaCollection, SharedCollection
 from .serializers import MetaCollectionSerializer, AddToFavouriteSerializer, AddToStarredSerializer, ShareCollectionSerializer, AddToLikedCollectionSerializer, MySharedCollectionsResponseSerializer, SharedCollectionsByUserResponseSerializer, UsersWhoSharedCollectionsListResponseSerializer
-from apps.gallery.models import Collection
+from common.apps.gallery.models import Collection
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
@@ -207,7 +207,7 @@ class MySharedCollectionsView(APIView):
         # Group by collection and include sharing details
         shared_data = []
         for share in shared_by_me:
-            from apps.gallery.serializers import CollectionSerializer
+            from common.apps.gallery.serializers import CollectionSerializer
             collection_data = CollectionSerializer(share.collection).data
             # Add sharing metadata
             collection_data['shared_with_email'] = share.shared_with.email
@@ -253,7 +253,7 @@ class SharedCollectionsByUserView(APIView):
         # Format the response
         shared_data = []
         for share in shared_with_me:
-            from apps.gallery.serializers import CollectionSerializer
+            from common.apps.gallery.serializers import CollectionSerializer
             collection_data = CollectionSerializer(share.collection).data
             # Add sharer metadata
             collection_data['shared_by_email'] = share.owner.email

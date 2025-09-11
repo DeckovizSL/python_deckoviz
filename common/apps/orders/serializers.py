@@ -1,6 +1,6 @@
-from apps.payments.models import Transaction
+from common.apps.payments.models import Transaction
 from rest_framework import serializers
-from apps.carts.models import Cart
+from common.apps.carts.models import Cart
 from .models import Order,OrderDetail
 from django.db import transaction
 

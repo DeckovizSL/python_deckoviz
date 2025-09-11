@@ -5,7 +5,7 @@ import logging
 from django.conf import settings
 from django.utils import timezone
 from .models import AIModel, AIOperation, AICallback
-from apps.credits.services import CreditService
+from common.apps.credits.services import CreditService
 
 logger = logging.getLogger(__name__)
 

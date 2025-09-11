@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import MetaImage, SharedImage
 from .serializers import MetaImageSerializer, AddToLikedSerializer, AddToStarredSerializer, ShareImageSerializer, MySharedImagesResponseSerializer, SharedImagesByUserResponseSerializer, UsersWhoSharedListResponseSerializer
-from apps.gallery.models import Image
+from common.apps.gallery.models import Image
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
@@ -164,7 +164,7 @@ class MySharedImagesView(APIView):
         # Group by image and include sharing details
         shared_data = []
         for share in shared_by_me:
-            from apps.gallery.serializers import ImageSerializer
+            from common.apps.gallery.serializers import ImageSerializer
             image_data = ImageSerializer(share.image).data
             # Add sharing metadata
             image_data['shared_with_email'] = share.shared_with.email
@@ -210,7 +210,7 @@ class SharedImagesByUserView(APIView):
         # Format the response
         shared_data = []
         for share in shared_with_me:
-            from apps.gallery.serializers import ImageSerializer
+            from common.apps.gallery.serializers import ImageSerializer
             image_data = ImageSerializer(share.image).data
             # Add sharer metadata
             image_data['shared_by_email'] = share.owner.email

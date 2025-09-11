@@ -1,9 +1,9 @@
-from apps.authentication.models import BaseModel
+from common.apps.authentication.models import BaseModel
 from django.db import models
 from django.contrib.auth import get_user_model
-from apps.utils.choices import STATUS_DICT
+from common.apps.utils.choices import STATUS_DICT
 from .managers import OrderManager, OrderDetailManager
-from apps.utils.generator import gen_uuid
+from common.apps.utils.generator import gen_uuid
 
 User = get_user_model()
 

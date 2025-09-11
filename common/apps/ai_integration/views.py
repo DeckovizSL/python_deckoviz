@@ -65,7 +65,7 @@ class AIOperationViewSet(viewsets.ModelViewSet):
         operation.save()
         
         # Refund credits
-        from apps.credits.services import CreditService
+        from common.apps.credits.services import CreditService
         CreditService.refund_credits(operation.id)
         
         return Response({'status': 'cancelled', 'message': 'Operation cancelled successfully'})

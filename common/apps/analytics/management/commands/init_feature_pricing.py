@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.analytics.models import FeaturePricing
+from common.apps.analytics.models import FeaturePricing
 
 
 class Command(BaseCommand):

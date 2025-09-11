@@ -1,7 +1,7 @@
 from django.db import models
-from apps.authentication.models import BaseModel
+from common.apps.authentication.models import BaseModel
 from .managers import PriceManager
-from apps.utils.choices import SIZE_CHOICES,CANVAS_RATIO
+from common.apps.utils.choices import SIZE_CHOICES,CANVAS_RATIO
 
 
 

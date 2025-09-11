@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from apps.authentication.models import BaseModel
-from apps.gallery.models import Image
+from common.apps.authentication.models import BaseModel
+from common.apps.gallery.models import Image
 
 User = get_user_model()
 

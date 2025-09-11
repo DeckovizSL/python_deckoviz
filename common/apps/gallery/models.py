@@ -1,8 +1,8 @@
 from django.db import models
-from apps.authentication.models import BaseModel
+from common.apps.authentication.models import BaseModel
 from django.contrib.auth import get_user_model
-from apps.utils.choices import INTERACTION_TYPES,VIEW_TYPES,TRANSCRIPTION_STATUS,COLLECTION_TYPES
-from apps.utils.user_directory import user_image_path,user_music_path,user_audio_path
+from common.apps.utils.choices import INTERACTION_TYPES,VIEW_TYPES,TRANSCRIPTION_STATUS,COLLECTION_TYPES
+from common.apps.utils.user_directory import user_image_path,user_music_path,user_audio_path
 import uuid
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone

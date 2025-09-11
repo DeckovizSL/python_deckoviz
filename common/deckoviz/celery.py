@@ -21,15 +21,15 @@ app.conf.worker_concurrency = 4  # Replace 4 with the desired number of concurre
 # Add Celery Beat scheduler
 app.conf.beat_schedule = {
     'run_process_audio_task': {
-        'task': 'apps.gallery.tasks.process_audio',
+        'task': 'common.apps.gallery.tasks.process_audio',
         'schedule': timedelta(seconds=10),  # Run every 10 seconds
     },  
     'run_populate_unsplash_images_task': {
-        'task': 'apps.gallery.tasks.populate_unsplash_images',
+        'task': 'common.apps.gallery.tasks.populate_unsplash_images',
         'schedule': timedelta(seconds=10),  # Run every 10 seconds
     },
         'run_generate_metadata_task': {
-        'task': 'apps.gallery.tasks.generate_metadata',
+        'task': 'common.apps.gallery.tasks.generate_metadata',
         'schedule': timedelta(minutes=2),  # Run every 10 seconds
     },
 }

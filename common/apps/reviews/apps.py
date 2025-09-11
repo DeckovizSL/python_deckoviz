@@ -6,4 +6,4 @@ class ReviewsConfig(AppConfig):
     name = 'common.apps.reviews'
     
     def ready(self):
-        import apps.reviews.signals
+        import common.apps.reviews.signals

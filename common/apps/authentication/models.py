@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxLengthValidator
-from apps.utils.choices import ADDRESS_TYPES
+from common.apps.utils.choices import ADDRESS_TYPES
 from .managers import AddressManager
 from django.utils import timezone
 import secrets
