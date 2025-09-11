@@ -40,90 +40,40 @@ def get_qr_redis_manager():
 @router.post("/qr/generate-qr", response_model=GenerateQRResponse)
 async def generate_pairing_qr(request: GenerateQRRequest, redis_manager: QRRedisManager = Depends(get_qr_redis_manager)):
     """
-    Generate a QR code for TV-Mobile app pairing with room ID transfer.
-    This endpoint is called by the TV app to get a QR code to display.
+    Generate a QR code for TV pairing (encodes only qr_token).
     """
-    # Create QR code generator
     qr_generator = TVQRCodeGenerator()
-    
-    # Generate room pairing QR code
-    _, base64_qr, pairing_data, device_id = qr_generator.generate_room_pairing_qr(
-        api_base_url=request.api_base_url,
+    _, base64_qr, pairing_data, qr_token = qr_generator.generate_qr_pairing(
         instruction_text=request.instructions,
         save_file=False
     )
-    
-    # Store the device ID in Redis with empty room (will be filled when mobile app scans)
-    device_data = {
-        "room_id": None, 
-        "created_at": time.time(), 
-        "qr_expiration": int(time.time()) + (5 * 60) # 5 minutes expiration
-    }
-    redis_manager.store_device_data(device_id, device_data)
-    redis_manager.update_device_timestamp(device_id)
-    
-    logger.debug(f"Generated pairing QR for device: {device_id}")
-    
-    # Return the QR code information
+    # Store qr_token mapped to user_id in Redis (short expiry)
+    redis_manager.store_qr_token(qr_token, request.user_id)
+    expiration_time = int(time.time()) + redis_manager.QR_TOKEN_EXPIRY
+    logger.debug(f"Generated QR token {qr_token} for user {request.user_id}")
     return GenerateQRResponse(
-        device_id=device_id,
+        qr_token=qr_token,
         qr_code_base64=base64_qr,
-        expiration_time=device_data["qr_expiration"]
+        expiration_time=expiration_time
     )
 
-@router.post("/qr/pair", response_model=PairingResponse)
-async def pair_device(request: PairingRequest, 
-                     user_id: str = Depends(get_current_user),
-                     redis_manager: QRRedisManager = Depends(get_qr_redis_manager)):
+@router.post("/qr/pair-tv", response_model=PairingResponse)
+async def pair_tv(request: PairingRequest, user_id: str = Depends(get_current_user), redis_manager: QRRedisManager = Depends(get_qr_redis_manager)):
     """
-    Pair a TV device with a room ID from the mobile app.
-    This is called by the mobile app after scanning the QR code.
+    Pair a TV device using qr_token (called by mobile app after scanning QR).
     """
-    # Check if device_id exists
-    device_data = redis_manager.get_device_data(request.device_id)
-    
-    if not device_data:
-        # Initialize it with empty data (waiting for room ID)
-        device_data = {
-            "room_id": None, 
-            "created_at": time.time(),
-            "status": "new"
-        }
-    
-    # Generate a room ID if not provided
-    room_id = request.room_id
-    if not room_id:
-        room_id = f"room-{str(uuid.uuid4())[:8]}"
-    
-    # Store the room ID for this device
-    device_data["room_id"] = room_id
-    device_data["updated_at"] = time.time()
-    device_data["user_id"] = user_id  # Store the user that paired with this device
-    device_data["status"] = "paired"
-    
-    # Store the updated data in Redis with longer expiry since it's now paired
-    redis_manager.store_device_data(request.device_id, device_data, paired=True)
-    redis_manager.update_device_timestamp(request.device_id)
-    
-    # Add the room to active rooms tracking in Redis
-    redis_manager.add_room(room_id)
-    
-    # Initialize room metadata in Redis
-    room_metadata = {
-        "created_at": time.time(),
-        "creator_user_id": user_id,
-        "device_id": request.device_id,
-        "last_activity": time.time(),
-        "connection_count": 0
-    }
-    redis_manager.store_room_metadata(room_id, room_metadata)
-    
-    logger.debug(f"Paired device {request.device_id} with room {room_id}")
-    
-    return PairingResponse(
-        success=True,
-        message=f"Device {request.device_id} paired successfully with room {room_id}"
-    )
+    # Validate qr_token and get mapped user_id
+    mapped_user_id = redis_manager.get_user_id_by_qr_token(request.qr_token)
+    if not mapped_user_id:
+        return PairingResponse(success=False, message="Invalid or expired QR token.")
+    if mapped_user_id != user_id:
+        return PairingResponse(success=False, message="User mismatch for QR token.")
+    # Expire the QR token after successful pairing
+    redis_manager.expire_qr_token(request.qr_token)
+    # Notify TV via WebSocket (if implemented)
+    # ...existing code for notification...
+    logger.debug(f"Paired TV for user {user_id} using QR token {request.qr_token}")
+    return PairingResponse(success=True, message="TV paired successfully.")
 
 @router.get("/qr/device/{device_id}/room")
 async def get_room_for_device(device_id: str, redis_manager: QRRedisManager = Depends(get_qr_redis_manager)):

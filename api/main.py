@@ -1,10 +1,15 @@
 # app.py
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "common.deckoviz.settings")
+django.setup()
+
 from fastapi import FastAPI, Depends
 import logging
 from fastapi.middleware.cors import CORSMiddleware
-import os
 import sys
-
+from routers import device_pairing, device_ws
 # Ensure debug logs for all modules (including WebSocket router)
 logging.basicConfig(level=logging.DEBUG)
 
@@ -37,6 +42,9 @@ app.include_router(rooms.router)
 app.include_router(qr_code_redis.router)
 app.include_router(curations.router)
 
+# THE 2 NEW ADDED ROUTES FOR QR CODE SCANNER
+app.include_router(device_pairing.router)
+app.include_router(device_ws.router)
 
 @app.get("/", dependencies=[Depends(get_redis_client)])
 async def root():

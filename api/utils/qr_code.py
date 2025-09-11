@@ -16,26 +16,18 @@ class TVQRCodeGenerator:
         """
         self.websocket_endpoint = websocket_endpoint
         
-    def generate_device_id(self):
-        """Generate a unique device ID for the TV"""
+
+    def generate_qr_token(self):
+        """Generate a unique QR token (UUID) for pairing."""
         return str(uuid.uuid4())
         
-    def encode_room_pairing_data(self, device_id, api_endpoint="/api/pair"):
+
+    def encode_qr_token_data(self, qr_token):
         """
-        Create a specialized pairing data format for room ID transfer.
-        
-        Args:
-            device_id (str): The device ID for the TV app
-            api_endpoint (str): The API endpoint for pairing
-            
-        Returns:
-            dict: Data to be encoded in the QR code for room pairing
+        Create data to be encoded in the QR code for TV pairing (only qr_token).
         """
-        # Create a data structure with all necessary information for the mobile app to pair
         return {
-            "action": "pair_room",
-            "device_id": device_id,
-            "api_endpoint": api_endpoint,
+            "qr_token": qr_token,
             "timestamp": int(time.time()),
             "ver": "1.0"
         }
@@ -204,45 +196,19 @@ class TVQRCodeGenerator:
         
         return qr_img, base64_qr, pairing_data
         
-    def generate_room_pairing_qr(self, api_base_url, include_instructions=True, logo_path=None, save_file=True, instruction_text="Scan to connect your mobile app"):
+    def generate_qr_pairing(self, include_instructions=True, logo_path=None, save_file=False, instruction_text="Scan to connect your mobile app"):
         """
-        Generate a QR code specifically for room ID pairing between mobile and TV apps.
-        
-        Args:
-            api_base_url (str): Base URL for the API endpoint (e.g., "https://example.com")
-            include_instructions (bool): Whether to add instructions text
-            logo_path (str, optional): Path to logo image
-            save_file (bool): Whether to save the QR code to a file
-            instruction_text (str): Custom instruction text for the QR code
-            
-        Returns:
-            tuple: (Image object, base64 string, pairing data, device_id)
+        Generate a QR code for TV pairing (encodes only qr_token).
+        Returns: (Image, base64, pairing_data, qr_token)
         """
-        # Generate a unique device ID for this TV
-        device_id = self.generate_device_id()
-        
-        # Create the full API endpoint URL
-        if not api_base_url.endswith("/"):
-            api_base_url += "/"
-        api_endpoint = f"{api_base_url}api/pair"
-        
-        # Create specialized pairing data for room ID transfer
-        pairing_data = self.encode_room_pairing_data(device_id, api_endpoint)
-        
-        # Generate QR code
+        qr_token = self.generate_qr_token()
+        pairing_data = self.encode_qr_token_data(qr_token)
         qr_img = self.generate_qr_code(pairing_data, logo=logo_path)
-        
-        # Add instructions if needed
         if include_instructions:
             qr_img = self.add_instructions(qr_img, text=instruction_text)
-        
-        # Save to file if needed
         if save_file:
-            filename = f"tv_room_pairing_{device_id[:8]}.png"
+            filename = f"tv_qr_pairing_{qr_token[:8]}.png"
             self.save_qr_code(qr_img, filename=filename)
-        
-        # Get base64 representation
         base64_qr = self.get_qr_as_base64(qr_img)
-        
-        return qr_img, base64_qr, pairing_data, device_id
+        return qr_img, base64_qr, pairing_data, qr_token
 
