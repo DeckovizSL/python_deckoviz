@@ -21,6 +21,7 @@ class BaseModel(TimeStampedModel):
         abstract = True
 
 
+
 class User(AbstractUser,BaseModel):
     email = models.EmailField(unique=True)
     email_verified = models.BooleanField(default=False)
@@ -43,6 +44,19 @@ class User(AbstractUser,BaseModel):
         indexes = [
             models.Index(fields=['email', 'username', 'first_name', 'last_name', 'is_active', 'room']),
         ]
+
+# --- DeviceLink model for device-user pairing and refresh token management ---
+class DeviceLink(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="device_links")
+    device_type = models.CharField(max_length=50, default="tv")
+    refresh_token_hash = models.CharField(max_length=128, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.expires_at
         
 class Address(BaseModel):
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='addresses')

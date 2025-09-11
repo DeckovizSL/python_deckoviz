@@ -14,21 +14,18 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from google.oauth2 import service_account
-from decouple import config
+from decouple import Config, RepositoryEnv
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+BASE_DIR = Path(__file__).resolve().parent.parent.parent 
+# Load environment variables from .env
+# Tell decouple exactly where .env is
+ENV_FILE = os.path.join(BASE_DIR, ".env")
+config = Config(RepositoryEnv(ENV_FILE))
 SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG') or True
-
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Parse ALLOWED_HOSTS from environment - remove ports as they don't belong in ALLOWED_HOSTS
 raw_hosts = config('ALLOWED_HOSTS').split(',')
@@ -110,26 +107,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # custom created apps
-    'apps.authentication',
-    'apps.gallery',
-    'apps.notifications',
-    'apps.chats',
-    'apps.utils',
-    'apps.marketplace',
-    'apps.carts',
-    'apps.orders',
-    'apps.payments',
-    'apps.credits',
-    'apps.reviews',
-    'apps.ai_integration',
-    'apps.dashboard',
-    'apps.blogs',
-    'apps.metacollections',
-    'apps.metaimages',
-    'apps.metaaudios',
-    'apps.modes',
-    'apps.curations',
-    'apps.analytics',
+    'common.apps.authentication',
+    'common.apps.gallery',
+    'common.apps.notifications',
+    'common.apps.chats',
+    'common.apps.utils',
+    'common.apps.marketplace',
+    'common.apps.carts',
+    'common.apps.orders',
+    'common.apps.payments',
+    'common.apps.credits',
+    'common.apps.reviews',
+    'common.apps.ai_integration',
+    'common.apps.dashboard',
+    'common.apps.blogs',
+    'common.apps.metacollections',
+    'common.apps.metaimages',
+    'common.apps.metaaudios',
+    'common.apps.modes',
+    'common.apps.curations',
+    'common.apps.analytics',
     
     # third party apps  
     'rest_framework',
@@ -149,8 +146,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'apps.utils.middleware.RequestLoggingMiddleware',  # Add request logging
-    'apps.ai_integration.middleware.AIOperationMiddleware',
+    'common.apps.utils.middleware.RequestLoggingMiddleware',  # Add request logging
+    'common.apps.ai_integration.middleware.AIOperationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -370,11 +367,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='password')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='test@example.com')
 
-# Logging Configuration
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)  # create the folder if it doesn't exist
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -397,15 +396,15 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/app/logs/django_app.log',
-            'maxBytes': 10 * 1024 * 1024,  # 10MB
+            'filename': os.path.join(LOG_DIR, 'django_app.log'),
+            'maxBytes': 10 * 1024 * 1024,
             'backupCount': 5,
             'formatter': 'verbose',
         },
         'request_file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/app/logs/django_requests.log',
-            'maxBytes': 10 * 1024 * 1024,  # 10MB
+            'filename': os.path.join(LOG_DIR, 'django_requests.log'),
+            'maxBytes': 10 * 1024 * 1024,
             'backupCount': 5,
             'formatter': 'request',
         },
