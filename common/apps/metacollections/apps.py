@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class MetacollectionsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.metacollections' 
+    name = 'common.apps.metacollections' 
