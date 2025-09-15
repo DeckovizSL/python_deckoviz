@@ -375,3 +375,8 @@ INFO 2025-09-12 09:38:59 [django.utils.autoreload] Watching for file changes wit
 INFO 2025-09-15 13:37:58 [django.utils.autoreload] Watching for file changes with StatReloader
 WARNING 2025-09-15 17:59:53 [root] JWT decode: exp=1757920457, now=1757939393, diff=-18936
 WARNING 2025-09-15 18:27:44 [root] JWT decode: exp=1757941877, now=1757941064, diff=813
+WARNING 2025-09-15 18:31:54 [root] JWT decode: exp=1757941877, now=1757941314, diff=563
+WARNING 2025-09-15 18:48:07 [root] JWT decode: exp=1757941877, now=1757942287, diff=-410
+WARNING 2025-09-15 18:49:33 [root] JWT decode: exp=1757941877, now=1757942373, diff=-496
+WARNING 2025-09-15 18:50:46 [root] JWT decode: exp=1757943308, now=1757942446, diff=862
+WARNING 2025-09-15 18:52:04 [root] JWT decode: exp=1757943308, now=1757942524, diff=784
