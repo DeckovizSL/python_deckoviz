@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Body, Depends
-from routers.websocket import   notify_new_images
-from databases.configs import get_redis_client
-from utils.queue import Queue
-from  core.logger import logger
+from api.routers.websocket import   notify_new_images
+from api.databases.configs import get_redis_client
+from api.utils.queue import Queue
+from  api.core.logger import logger
 import uuid
 import threading
 import httpx
 import time 
-from schemas.rooms import BatchRequest
-from utils.websocket_manager import manager
+from api.schemas.rooms import BatchRequest
+from api.utils.websocket_manager import manager
 
 
 router = APIRouter(

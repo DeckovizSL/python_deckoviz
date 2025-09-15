@@ -1,6 +1,6 @@
-from apps.products.models import SKU, Product
+from common.apps.products.models import SKU, Product
 from apps.reviews.filters import ReviewFilter
-from apps.services.models import Service
+from common.apps.services.models import Service
 from rest_framework import mixins,viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.exceptions import PermissionDenied 

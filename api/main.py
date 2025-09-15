@@ -5,11 +5,12 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "common.deckoviz.settings")
 django.setup()
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, APIRouter
+import datetime
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 import sys
-from routers import device_pairing, device_ws
+from api.routers import device_pairing, device_ws
 # Ensure debug logs for all modules (including WebSocket router)
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,9 +18,9 @@ logging.basicConfig(level=logging.DEBUG)
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, project_root)
 
-from routers import  websocket, rooms, qr_code_redis, curations, curations
-from databases.configs import get_redis_client
-from middleware.logging import RequestLoggingMiddleware
+from api.routers import  websocket, rooms, qr_code_redis, curations, curations
+from api.databases.configs import get_redis_client
+from api.middleware.logging import RequestLoggingMiddleware
 
 # Initialize the application
 app = FastAPI()
@@ -49,3 +50,9 @@ app.include_router(device_ws.router)
 @app.get("/", dependencies=[Depends(get_redis_client)])
 async def root():
     return {"message": "Welcome to the Deckoviz API."}
+
+time_router=APIRouter()
+
+@app.get("/server-time")
+def get_server_time():
+    return {"utcnow": str(datetime.datetime.utcnow())}

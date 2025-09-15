@@ -1,15 +1,18 @@
 from jose import jwt
 from fastapi import HTTPException, status
-from utils.settings import SECRET_KEY, JWT_HASH_ALGORITHM
+from api.utils.settings import SECRET_KEY, JWT_HASH_ALGORITHM
 import datetime
 
 def create_jwt(payload: dict, exp_minutes: int = 15) -> str:
     payload = payload.copy()
-    payload['exp'] = int((datetime.datetime.utcnow() + datetime.timedelta(minutes=exp_minutes)).timestamp())
+    # Always set 'exp' as integer Unix timestamp (seconds since epoch)
+    exp_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=exp_minutes)
+    payload['exp'] = int(exp_time.replace(tzinfo=datetime.timezone.utc).timestamp())
     return jwt.encode(payload, SECRET_KEY, algorithm=JWT_HASH_ALGORITHM)
 
 def decode_jwt(token: str) -> dict:
     try:
+        # Decode and validate 'exp' claim as UTC integer timestamp
         return jwt.decode(token, SECRET_KEY, algorithms=[JWT_HASH_ALGORITHM])
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired.")

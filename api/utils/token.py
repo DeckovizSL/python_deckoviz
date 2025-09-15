@@ -1,7 +1,7 @@
 
 from jose import jwt
 from fastapi import HTTPException,status
-from utils.settings import SECRET_KEY, JWT_HASH_ALGORITHM
+from api.utils.settings import SECRET_KEY, JWT_HASH_ALGORITHM
 
 def verify_access_token(token:str) -> dict:
     try:

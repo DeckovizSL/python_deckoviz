@@ -19,50 +19,12 @@ class QRRedisManager:
     ROOM_CONNECTIONS_PREFIX = "qr:room_connections:"
     ROOM_METADATA_PREFIX = "qr:room_metadata:"
     ROOM_MESSAGES_PREFIX = "qr:room_messages:"
-    QR_TOKEN_PREFIX = "qr:token:"
     
     # Default expiration times (in seconds)
     DEFAULT_DEVICE_EXPIRY = 60 * 10  # 10 minutes
     UNPAIRED_DEVICE_EXPIRY = 60 * 5  # 5 minutes
     ROOM_EXPIRY = 60 * 30  # 30 minutes
     MESSAGE_EXPIRY = 60 * 60 * 24  # 24 hours
-    QR_TOKEN_EXPIRY = 60 * 2  # 2 minutes
-    def store_qr_token(self, qr_token: str, user_id: str) -> None:
-        """
-        Store a QR token mapped to a user_id with short expiry.
-        """
-        try:
-            key = f"{self.QR_TOKEN_PREFIX}{qr_token}"
-            self.redis.set(key, user_id, ex=self.QR_TOKEN_EXPIRY)
-            logger.debug(f"Stored QR token {qr_token} for user {user_id}")
-        except Exception as e:
-            logger.error(f"Error storing QR token in Redis: {str(e)}")
-            raise
-
-    def get_user_id_by_qr_token(self, qr_token: str) -> Optional[str]:
-        """
-        Retrieve user_id mapped to a QR token.
-        """
-        try:
-            key = f"{self.QR_TOKEN_PREFIX}{qr_token}"
-            user_id = self.redis.get(key)
-            if user_id:
-                return user_id.decode('utf-8')
-            return None
-        except Exception as e:
-            logger.error(f"Error retrieving user_id by QR token: {str(e)}")
-            return None
-
-    def expire_qr_token(self, qr_token: str) -> None:
-        """
-        Expire a QR token after successful pairing.
-        """
-        try:
-            key = f"{self.QR_TOKEN_PREFIX}{qr_token}"
-            self.redis.delete(key)
-            logger.debug(f"Expired QR token {qr_token}")
-        except Exception as e:
-            logger.error(f"Error expiring QR token: {str(e)}")
     
     def __init__(self, redis_client: Redis):
         """

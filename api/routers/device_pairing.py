@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import timedelta
 import uuid, secrets, bcrypt
-from utils.device_tokens import create_jwt, decode_jwt, get_current_user
+from api.utils.device_tokens import create_jwt, decode_jwt, get_current_user
 from common.apps.authentication.models import User, DeviceLink
 from django.utils import timezone
 

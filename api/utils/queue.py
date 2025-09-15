@@ -1,6 +1,6 @@
 
 import json
-from  schemas.rooms import Collection
+from  api.schemas.rooms import Collection
 
 class Queue:
     def __init__(self, redis_client, key, max_queue_size=20, precision_factor=100):

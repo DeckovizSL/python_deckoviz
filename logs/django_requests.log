@@ -858,3 +858,53 @@ REQUEST 2025-09-11 19:14:18 [ERROR] ERROR GET /admin | User: anonymous | Duratio
 REQUEST 2025-09-11 19:14:18 [INFO] END GET /admin | Status: 404 | User: anonymous | Duration: 0.007s
 REQUEST 2025-09-11 19:14:18 [WARNING] Not Found: /admin
 REQUEST 2025-09-11 19:14:18 [WARNING] "GET /admin HTTP/1.1" 404 5536
+REQUEST 2025-09-12 09:46:03 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-12 09:46:03 [ERROR] ERROR GET / | User: anonymous | Duration: 0.006s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-12 09:46:03 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.034s
+REQUEST 2025-09-12 09:46:03 [WARNING] Not Found: /
+REQUEST 2025-09-12 09:46:03 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-12 09:46:03 [INFO] START GET /favicon.ico | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-12 09:46:03 [ERROR] ERROR GET /favicon.ico | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\favicon.ico” does not exist
+REQUEST 2025-09-12 09:46:03 [INFO] END GET /favicon.ico | Status: 404 | User: anonymous | Duration: 0.007s
+REQUEST 2025-09-12 09:46:03 [WARNING] Not Found: /favicon.ico
+REQUEST 2025-09-12 09:46:03 [WARNING] "GET /favicon.ico HTTP/1.1" 404 5560
+REQUEST 2025-09-15 13:38:32 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 13:38:32 [ERROR] ERROR GET / | User: anonymous | Duration: 0.008s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-15 13:38:32 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.059s
+REQUEST 2025-09-15 13:38:32 [WARNING] Not Found: /
+REQUEST 2025-09-15 13:38:32 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-15 13:38:33 [INFO] START GET /favicon.ico | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 13:38:33 [ERROR] ERROR GET /favicon.ico | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\favicon.ico” does not exist
+REQUEST 2025-09-15 13:38:33 [INFO] END GET /favicon.ico | Status: 404 | User: anonymous | Duration: 0.004s
+REQUEST 2025-09-15 13:38:33 [WARNING] Not Found: /favicon.ico
+REQUEST 2025-09-15 13:38:33 [WARNING] "GET /favicon.ico HTTP/1.1" 404 5560
+REQUEST 2025-09-15 13:38:37 [INFO] START GET /docs | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 13:38:37 [ERROR] ERROR GET /docs | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\docs” does not exist
+REQUEST 2025-09-15 13:38:37 [INFO] END GET /docs | Status: 404 | User: anonymous | Duration: 0.004s
+REQUEST 2025-09-15 13:38:37 [WARNING] Not Found: /docs
+REQUEST 2025-09-15 13:38:37 [WARNING] "GET /docs HTTP/1.1" 404 5532
+REQUEST 2025-09-15 13:39:27 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 13:39:27 [ERROR] ERROR GET / | User: anonymous | Duration: 0.002s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-15 13:39:27 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.006s
+REQUEST 2025-09-15 13:39:27 [WARNING] Not Found: /
+REQUEST 2025-09-15 13:39:27 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-15 15:23:34 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 15:23:34 [ERROR] ERROR GET / | User: anonymous | Duration: 0.005s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-15 15:23:34 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.014s
+REQUEST 2025-09-15 15:23:34 [WARNING] Not Found: /
+REQUEST 2025-09-15 15:23:34 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-15 15:23:39 [INFO] START GET /docs | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 15:23:39 [ERROR] ERROR GET /docs | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\docs” does not exist
+REQUEST 2025-09-15 15:23:39 [INFO] END GET /docs | Status: 404 | User: anonymous | Duration: 0.004s
+REQUEST 2025-09-15 15:23:39 [WARNING] Not Found: /docs
+REQUEST 2025-09-15 15:23:39 [WARNING] "GET /docs HTTP/1.1" 404 5532
+REQUEST 2025-09-15 15:24:27 [INFO] START GET / | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 15:24:27 [ERROR] ERROR GET / | User: anonymous | Duration: 0.001s | Exception: Directory indexes are not allowed here.
+REQUEST 2025-09-15 15:24:27 [INFO] END GET / | Status: 404 | User: anonymous | Duration: 0.008s
+REQUEST 2025-09-15 15:24:27 [WARNING] Not Found: /
+REQUEST 2025-09-15 15:24:27 [WARNING] "GET / HTTP/1.1" 404 5457
+REQUEST 2025-09-15 15:36:31 [INFO] START GET /docs | User: anonymous | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Sa
+REQUEST 2025-09-15 15:36:31 [ERROR] ERROR GET /docs | User: anonymous | Duration: 0.001s | Exception: “C:\Users\Arjun VJ\Desktop\DECKOVIZ_BACKEND\python_deckoviz\docs” does not exist
+REQUEST 2025-09-15 15:36:31 [INFO] END GET /docs | Status: 404 | User: anonymous | Duration: 0.009s
+REQUEST 2025-09-15 15:36:31 [WARNING] Not Found: /docs
+REQUEST 2025-09-15 15:36:31 [WARNING] "GET /docs HTTP/1.1" 404 5532

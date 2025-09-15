@@ -1,7 +1,7 @@
 # WebSocket router setup: import necessary FastAPI classes and logger
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from core.logger import logger
-from utils.websocket_manager import manager
+from api.core.logger import logger
+from api.utils.websocket_manager import manager
 
 # Initialize router and logger
 router = APIRouter()

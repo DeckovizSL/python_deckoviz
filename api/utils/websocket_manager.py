@@ -1,6 +1,6 @@
 from fastapi import WebSocket
 from typing import Dict, Set
-from core.logger import logger
+from api.core.logger import logger
 
 # Store active WebSocket connections
 class ConnectionManager:
