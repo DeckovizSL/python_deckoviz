@@ -11,8 +11,15 @@ def create_jwt(payload: dict, exp_minutes: int = 15) -> str:
     return jwt.encode(payload, SECRET_KEY, algorithm=JWT_HASH_ALGORITHM)
 
 def decode_jwt(token: str) -> dict:
+    import logging
+    from datetime import datetime, timezone
     try:
-        # Decode and validate 'exp' claim as UTC integer timestamp
+        # Decode without verification to inspect exp
+        unverified = jwt.get_unverified_claims(token)
+        exp = unverified.get('exp')
+        now = int(datetime.now(timezone.utc).timestamp())
+        logging.warning(f"JWT decode: exp={exp}, now={now}, diff={exp-now}")
+        # Now decode and validate
         return jwt.decode(token, SECRET_KEY, algorithms=[JWT_HASH_ALGORITHM])
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired.")

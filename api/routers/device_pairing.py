@@ -21,13 +21,19 @@ def pair_tv(session_id: str, current_user: User = Depends(get_current_user)):
     refresh_hash = bcrypt.hashpw(refresh_token.encode(), bcrypt.gensalt()).decode()
     expiry = timezone.now() + timezone.timedelta(days=REFRESH_EXPIRE_DAYS)
 
+    # Ensure current_user is a User instance
+    if isinstance(current_user, str):
+        user_obj = User.objects.get(id=current_user)
+    else:
+        user_obj = current_user
+
     DeviceLink.objects.create(
-        user=current_user,
+        user=user_obj,
         refresh_token_hash=refresh_hash,
         expires_at=expiry
     )
 
-    access_token = create_jwt({"user_id": str(current_user.id), "role": "tv"}, exp_minutes=ACCESS_EXPIRE_MINUTES)
+    access_token = create_jwt({"user_id": str(user_obj.id), "role": "tv"}, exp_minutes=ACCESS_EXPIRE_MINUTES)
 
     return {"access_token": access_token, "refresh_token": refresh_token}
 
