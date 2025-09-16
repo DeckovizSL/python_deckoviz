@@ -6,8 +6,9 @@ from common.apps.authentication.models import User, DeviceLink
 from django.utils import timezone
 
 router = APIRouter(prefix="/device", tags=["Device Pairing"])
-
-ACCESS_EXPIRE_MINUTES = 15
+ 
+TV_ACCESS_EXPIRE_MINUTES = 24 * 60  # 24 hours
+MOBILE_ACCESS_EXPIRE_MINUTES = 15   # 15 minutes (default)
 REFRESH_EXPIRE_DAYS = 365
 
 @router.post("/session/new")
@@ -33,7 +34,7 @@ def pair_tv(session_id: str, current_user: User = Depends(get_current_user)):
         expires_at=expiry
     )
 
-    access_token = create_jwt({"user_id": str(user_obj.id), "role": "tv"}, exp_minutes=ACCESS_EXPIRE_MINUTES)
+    access_token = create_jwt({"user_id": str(user_obj.id), "role": "tv"}, exp_minutes=TV_ACCESS_EXPIRE_MINUTES)
 
     return {"access_token": access_token, "refresh_token": refresh_token}
 
@@ -44,7 +45,13 @@ def refresh_token(refresh_token: str):
         if bcrypt.checkpw(refresh_token.encode(), device.refresh_token_hash.encode()):
             if device.is_expired():
                 raise HTTPException(401, "Refresh token expired")
-            new_access = create_jwt({"user_id": str(device.user.id), "role": "tv"}, exp_minutes=ACCESS_EXPIRE_MINUTES)
+            # Use 24h expiry for TV, 15m for mobile (default)
+            role = getattr(device, 'device_type', 'tv')
+            if role == 'tv':
+                exp_minutes = TV_ACCESS_EXPIRE_MINUTES
+            else:
+                exp_minutes = MOBILE_ACCESS_EXPIRE_MINUTES
+            new_access = create_jwt({"user_id": str(device.user.id), "role": role}, exp_minutes=exp_minutes)
             return {"access_token": new_access}
     raise HTTPException(401, "Invalid refresh token")
 
