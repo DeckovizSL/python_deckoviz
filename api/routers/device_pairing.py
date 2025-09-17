@@ -4,7 +4,7 @@ import uuid, secrets, bcrypt
 from api.utils.device_tokens import create_jwt, decode_jwt, get_current_user
 from common.apps.authentication.models import User, DeviceLink
 from django.utils import timezone
-
+from api.utils.create_qr import generate_qr_base64
 router = APIRouter(prefix="/device", tags=["Device Pairing"])
  
 TV_ACCESS_EXPIRE_MINUTES = 24 * 60  # 24 hours
@@ -14,7 +14,8 @@ REFRESH_EXPIRE_DAYS = 365
 @router.post("/session/new")
 def create_session():
     session_id = str(uuid.uuid4())
-    return {"session_id": session_id, "qr_url": f"https://app.com/qr/{session_id}"}
+    qr_code=generate_qr_base64(session_id)
+    return {"session_id": session_id, "qr_url": f"https://app.com/qr/{session_id}", "qr_code":qr_code}
 
 @router.post("/pair-tv")
 def pair_tv(session_id: str, current_user: User = Depends(get_current_user)):
