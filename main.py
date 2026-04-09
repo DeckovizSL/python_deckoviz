@@ -27,7 +27,8 @@ from routers import (
     reimagine_art_router,
     runware_text_to_video_router,
     text_visualization,
-    storyboard
+    storyboard,
+    contextual_chat
 )
 from database.sqlite import create_sqlite_db
 from database.connection import Base, engine
@@ -90,6 +91,8 @@ app.include_router(runware_flux_tools.router, prefix="/runware-flux-tools", tags
 app.include_router(reimagine_art_router, prefix="/reimagine-art", tags=["reimagine-art"])
 app.include_router(runware_text_to_video_router, prefix="/runware-text-to-video", tags=["runware-text-to-video"])
 app.include_router(text_visualization.router, prefix="/text-visualization", tags=["text-visualization"])
+app.include_router(contextual_chat.router, prefix="/contextual-chat", tags=["contextual chat"])
+
 
 @app.get("/")
 def read_root():
